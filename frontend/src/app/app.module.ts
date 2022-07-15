@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { PrimeNgModule } from 'src/primeng.module'
 
@@ -8,7 +9,7 @@ import { AppComponent } from './app.component'
 import { HomeComponent } from './pages/home/home.component'
 import { SignUpComponent } from './pages/sign-up/sign-up.component'
 import { SignInComponent } from './pages/sign-in/sign-in.component'
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component'
 import { CreateRoomComponent } from './pages/create-room/create-room.component'
 
 @NgModule({
@@ -20,7 +21,12 @@ import { CreateRoomComponent } from './pages/create-room/create-room.component'
         NavbarComponent,
         CreateRoomComponent
     ],
-    imports: [BrowserModule, AppRoutingModule, PrimeNgModule],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        PrimeNgModule
+    ],
     providers: [],
     bootstrap: [AppComponent]
 })
