@@ -1,6 +1,6 @@
-<div class='flex flex-column'>
-    <div class='flex flex-row justify-content-evenly pt-4'>
-        <div>
+<div>
+    <div class='flex flex-row justify-content-evenly gap-8 mx-8 pt-4,'>
+        <div class='flex flex-column align-content-center w-full'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
@@ -9,32 +9,59 @@
                 <div class='border-left-3 h-3rem m-2'></div>
                 <p class='text-4xl m-2'>Event Details</p>
             </div>
-            <div class='w-30rem h-30rem shadow-1 bg-white'>
-                <input type="text" pInputText />
+            <div class='bg-white shadow-1 border-round-md w-full h-20rem'>
+                <div class='field px-2 pt-2'>
+                    <label for='eventName'>Event Name</label>
+                    <input id='eventName' type='text' class='w-full p-2' placeholder='Project Proposal Meeting...'
+                        required>
+                </div>
+                <div class='field px-2'>
+                    <label for=' eventDescription'>Event Description</label>
+                    <textarea id='eventDescription' type='text' class='w-full p-2'
+                        placeholder='To discuss our upcoming assignment project proposal...' rows=4 maxlength=255
+                        required></textarea>
+                </div>
+                <div class='field px-2'>
+                    <label for='eventLocation'>Event Location</label>
+                    <input id='eventLocation' type='text' class='w-full p-2' placeholder='School Library...'>
+                </div>
             </div>
         </div>
-        <div>
+        <div class='flex flex-column justify-content-center w-full'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
                     <p class='text-4xl'>2</p>
                 </div>
                 <div class='border-left-3 h-3rem m-2'></div>
-                <p class='text-4xl m-2'>Host Availability</p>
+                <p class='text-4xl m-2'>Date & Time</p>
             </div>
-            <div class='w-30rem h-30rem shadow-1 bg-white'></div>
+            <div class='w-full h-20rem bg-white shadow-1 border-round-md'>
+                <label>Date Type</label>
+                <div class="formgroup-inline">
+
+                    <div class="field-radiobutton">
+                        <input type="radio" name="hcity" id="city7">
+                        <label for="city7">Chicago</label>
+                    </div>
+                    <div class="field-radiobutton">
+                        <input type="radio" name="hcity" id="city8">
+                        <label for="city8">Los Angeles</label>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
+        <div class='flex flex-column justify-content-center w-full '>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
                     <p class='text-4xl'>3</p>
                 </div>
                 <div class='border-left-3 h-3rem m-2'></div>
-                <p class='text-4xl m-2'>Date & Time</p>
+                <p class='text-4xl m-2'>Host Availability</p>
             </div>
-            <div class='w-30rem h-30rem shadow-1 bg-white'>
-
+            <div class='h-20rem bg-white shadow-1 border-round-md w-full'>
+                aaa
             </div>
         </div>
 
