@@ -8,7 +8,9 @@ import { Component, OnInit } from '@angular/core'
 export class CreateRoomComponent implements OnInit {
     constructor() {}
 
+    minDate: Date
+
     ngOnInit(): void {
-        value: Date
+        this.minDate = new Date()
     }
 }

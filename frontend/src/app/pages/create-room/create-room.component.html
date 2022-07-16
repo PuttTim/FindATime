@@ -1,5 +1,5 @@
 <div>
-    <div class='flex flex-row justify-content-evenly align-items-start gap-8 mx-8 pt-4,'>
+    <div class='flex flex-row justify-content-evenly align-items-start gap-8 mx-8 mt-2 mb-4'>
         <div class='flex flex-column align-content-center w-full'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
@@ -18,7 +18,7 @@
                 <div class='field mx-2'>
                     <label for=' eventDescription'>Event Description</label>
                     <textarea id='eventDescription' type='text' class='w-full p-2'
-                        placeholder='To discuss our upcoming assignment project proposal...' rows=4 maxlength=255
+                        placeholder='To discuss our upcoming assignment project proposal...' rows=2 maxlength=255
                         required></textarea>
                 </div>
                 <div class='field mx-2'>
@@ -36,15 +36,21 @@
                 <div class='border-left-3 h-3rem m-2'></div>
                 <p class='text-4xl m-2'>Date & Time</p>
             </div>
-            <div class='flex flex-column justify-content-start bg-white shadow-1 border-round-md w-full h-22rem'>
+            <div class='flex flex-column bg-white shadow-1 border-round-md w-full h-full'>
                 <div class='field mx-2 mt-2'>
                     <label for='eventDate'>Select Date</label>
-                    <p-calendar id='eventDate' [touchUI]="true" [readonlyInput]="true" styleClass="w-full h-2rem">
+                    <p-calendar id='eventDate' [touchUI]="true" [readonlyInput]="true" [minDate]="minDate"
+                        selectionMode='multiple' styleClass="w-full h-3rem">
                     </p-calendar>
                 </div>
                 <div class='field mx-2'>
                     <label for='eventDuration'>Event Duration (in hours)</label>
                     <input type='number' id='eventDuration' class='w-full p-2'>
+                </div>
+                <div class='field mx-2'>
+                    <p>Host Availability</p>
+                    <p-button styleClass='w-full p-button-sm' label="SELECT AVAILABILITY">
+                    </p-button>
                 </div>
             </div>
         </div>
