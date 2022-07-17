@@ -58,7 +58,7 @@ export class RoomComponent implements OnInit {
     }
 
     getBestTimeslot() {
-        const allStartTimes: any[] = []
+        const allStartTimes: Date[] = []
 
         // Get every participant's start times and push it into the allStartTimes array
         this.roomData?.participants.forEach(participant => {
@@ -71,7 +71,9 @@ export class RoomComponent implements OnInit {
 
         // Count the number of times each start time occurs into a 2d array of
         // [[Date, count], [Date, count], ...]
-        console.log(this.countStartTimes(allStartTimes))
+        console.log(typeof this.countStartTimes(allStartTimes)[0][0])
+
+        return this.countStartTimes(allStartTimes)
     }
 
     // Counts the amount of times a start time occurs in the allStartTimes array
@@ -90,8 +92,13 @@ export class RoomComponent implements OnInit {
         const sorted: any = []
         for (const [key, value] of Object.entries(obj)) {
             sorted.push([key, value])
-            console.log(`${key}: ${value}`)
         }
         return sorted.sort((a: any, b: any) => b[1] - a[1])
+    }
+
+    getEndTime(startTime: Date, duration: number) {
+        console.log(typeof startTime)
+
+        return new Date(startTime.getHours() + duration * 60000)
     }
 }

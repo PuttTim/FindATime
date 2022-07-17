@@ -38,11 +38,12 @@
             <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
                 <div>
                     <h3>Best Timeslot 1</h3>
-                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                    <p>{{getBestTimeslot()[0][0] | date: 'EEE dd MMM yyyy @ HH:mm'}}</p>
                 </div>
                 <div>
                     <h3 class='text-right'>Availability</h3>
-                    <p class='text-right'>5/6 people</p>
+                    <p class='text-right'>{{getBestTimeslot()[0][1]}} / {{this.roomData?.participants?.length}}
+                        Participants</p>
                 </div>
             </div>
         </div>
@@ -50,11 +51,12 @@
             <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
                 <div>
                     <h3>Best Timeslot 2</h3>
-                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                    <p>{{getBestTimeslot()[1][0] | date: 'EEE dd MMM yyyy @ HH:mm'}}</p>
                 </div>
                 <div>
                     <h3 class='text-right'>Availability</h3>
-                    <p class='text-right'>5/6 people</p>
+                    <p class='text-right'>{{getBestTimeslot()[1][1]}} / {{this.roomData?.participants?.length}}
+                        Participants</p>
                 </div>
             </div>
         </div>
@@ -62,14 +64,17 @@
             <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
                 <div>
                     <h3>Best Timeslot 3</h3>
-                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                    <p>{{getBestTimeslot()[2][0] | date: 'EEE dd MMM yyyy @ HH:mm'}}</p>
                 </div>
                 <div>
                     <h3 class='text-right'>Availability</h3>
-                    <p class='text-right'>5/6 people</p>
+                    <p class='text-right'>{{getBestTimeslot()[2][1]}} / {{this.roomData?.participants?.length}}
+                        Participants</p>
                 </div>
             </div>
         </div>
+
+
         <div class='col-6'>
             <div class='h-full bg-white shadow-1 border-round-lg px-2'>
                 <h2 class='mt-0 mb-0'>Participants</h2>
