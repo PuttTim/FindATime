@@ -46,11 +46,11 @@
                 </div>
                 <div class='field'>
                     <label for='eventDuration'>Event Duration (in hours)</label>
-                    <input type='number' id='eventDuration' class='w-full p-2'>
+                    <input type='number' id='eventDuration' formControlName="duration" class='w-full p-2'>
                 </div>
                 <div class='field'>
                     <p>Host Availability</p>
-                    <p-button styleClass='w-full p-button-sm' label="SELECT AVAILABILITY">
+                    <p-button (click)='toggleDialog()' styleClass='w-full p-button-sm' label="SELECT AVAILABILITY">
                     </p-button>
                 </div>
             </form>
@@ -68,17 +68,17 @@
 
                 <h3 class='my-0'>Event Name</h3>
                 <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
-                    {{eventDetails.value.eventName === '' ? '...' : eventDetails.value.eventName}}</p>
+                    {{eventDetails.value.name === '' ? '...' : eventDetails.value.name}}</p>
 
                 <h3 class='my-0'>Event Description</h3>
                 <p class='mt-0 mb-2 text-overflow-ellipsis'>
-                    {{eventDetails.value.eventDescription === '' ? '...' :
-                    eventDetails.value.eventDescription}}</p>
+                    {{eventDetails.value.description === '' ? '...' :
+                    eventDetails.value.description}}</p>
 
                 <h3 class='my-0'>Event Location</h3>
                 <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
-                    {{eventDetails.value.eventLocation === '' ? '...' :
-                    eventDetails.value.eventLocation}}</p>
+                    {{eventDetails.value.location === '' ? '...' :
+                    eventDetails.value.location}}</p>
 
                 <h3 class='my-0'>Event Dates</h3>
                 <div *ngIf="(eventDetails.value.date.length > 0); else elseBlock">
@@ -89,9 +89,33 @@
                 <ng-template #elseBlock>
                     <p class='mt-0 mb-2'>No date selected</p>
                 </ng-template>
-
-
             </div>
         </div>
     </div>
 </div>
+
+
+<p-dialog [(visible)]="showDialog" [modal]="true" [style]="{width: '75vw', height: '80vh'}" [draggable]="false"
+    [resizable]="false" closeIcon='pi' [dismissableMask]='true'>
+    <ng-template pTemplate="header">
+        <div class='w-full'>
+            <div class='flex flex-row justify-content-between align-items-center'>
+                <h2>Select available timeslots</h2>
+                <p-button icon="pi pi-times" (click)='toggleDialog()'
+                    styleClass='p-button-rounded p-button-text p-button-plain'>
+                </p-button>
+            </div>
+            <p class='mb-0'>End time is automatically calculated based on the duration of the event.</p>
+        </div>
+    </ng-template>
+    <div *ngFor="let date of eventDetails.value.date; index as i">
+        <p>{{date | date: 'EEE dd MMM yyyy'}}</p>
+        <p-multiSelect [maxSelectedLabels]='3' [options]="this.possibleTimeslots" optionLabel="name" display="chip"
+            (onChange)='selectedTimeslots(date, i, $event.value)' class='mr-4'>
+        </p-multiSelect>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-save" (click)="toggleDialog()" label="SAVE" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>

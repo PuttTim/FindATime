@@ -5,6 +5,8 @@ import { DividerModule } from 'primeng/divider'
 import { InputTextModule } from 'primeng/inputtext'
 import { CalendarModule } from 'primeng/calendar'
 import { ChipModule } from 'primeng/chip'
+import { DialogModule } from 'primeng/dialog'
+import { MultiSelectModule } from 'primeng/multiselect'
 
 @NgModule({
     exports: [
@@ -13,7 +15,9 @@ import { ChipModule } from 'primeng/chip'
         DividerModule,
         InputTextModule,
         CalendarModule,
-        ChipModule
+        ChipModule,
+        DialogModule,
+        MultiSelectModule
     ]
 })
 export class PrimeNgModule {}
