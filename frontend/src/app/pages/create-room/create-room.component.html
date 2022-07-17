@@ -1,70 +1,96 @@
 <div>
-    <div class='flex flex-row justify-content-evenly align-items-start gap-8 mx-8 mt-2 mb-4'>
-        <div class='flex flex-column align-content-center w-full'>
+    <div class='grid mx-4'>
+        <div class='col-4'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
                     <p class='text-4xl'>1</p>
                 </div>
                 <div class='border-left-3 h-3rem m-2'></div>
-                <p class='text-4xl m-2'>Event Details</p>
+                <p class='text-4xl m-2'>Information</p>
             </div>
-            <div class='flex flex-column justify-content-between bg-white shadow-1 border-round-md w-full h-full'>
-                <div class='field mx-2 mt-2'>
+            <form [formGroup]="eventDetails" class='h-auto bg-white shadow-1 border-round-md px-2 py-2'>
+                <div class='field'>
                     <label for='eventName'>Event Name</label>
-                    <input id='eventName' type='text' class='w-full p-2' placeholder='Project Proposal Meeting...'
-                        required>
+                    <input id='eventName' formControlName='eventName' type='text' class='w-full p-2'
+                        placeholder='Project Proposal Meeting...' required>
                 </div>
-                <div class='field mx-2'>
+                <div class='field'>
                     <label for=' eventDescription'>Event Description</label>
-                    <textarea id='eventDescription' type='text' class='w-full p-2'
+                    <textarea id='eventDescription' formControlName='eventDescription' type='text' class='w-full p-2'
                         placeholder='To discuss our upcoming assignment project proposal...' rows=2 maxlength=255
                         required></textarea>
                 </div>
-                <div class='field mx-2'>
+                <div class='field'>
                     <label for='eventLocation'>Event Location</label>
-                    <input id='eventLocation' type='text' class='w-full p-2' placeholder='School Library...'>
+                    <input id='eventLocation' formControlName='eventLocation' type='text' class='w-full p-2'
+                        placeholder='School Library...'>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class='flex flex-column justify-content-center w-full'>
+        <div class='col-4'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
                     <p class='text-4xl'>2</p>
                 </div>
                 <div class='border-left-3 h-3rem m-2'></div>
-                <p class='text-4xl m-2'>Date & Time</p>
+                <p class='text-4xl m-2'>Timeslots</p>
             </div>
-            <div class='flex flex-column bg-white shadow-1 border-round-md w-full h-full'>
-                <div class='field mx-2 mt-2'>
-                    <label for='eventDate'>Select Date</label>
-                    <p-calendar id='eventDate' [touchUI]="true" [readonlyInput]="true" [minDate]="minDate"
-                        selectionMode='multiple' styleClass="w-full h-3rem">
+            <form [formGroup]="eventDetails" class='h-auto bg-white shadow-1 border-round-md px-2 py-2'>
+                <div class='field'>
+                    <label for='eventDate'>Event Dates</label>
+                    <p-calendar id='eventDate' formControlName="date" [touchUI]="true" [readonlyInput]="true"
+                        [minDate]="minDate" selectionMode='multiple' styleClass="w-full h-3rem">
                     </p-calendar>
                 </div>
-                <div class='field mx-2'>
+                <div class='field'>
                     <label for='eventDuration'>Event Duration (in hours)</label>
                     <input type='number' id='eventDuration' class='w-full p-2'>
                 </div>
-                <div class='field mx-2'>
+                <div class='field'>
                     <p>Host Availability</p>
                     <p-button styleClass='w-full p-button-sm' label="SELECT AVAILABILITY">
                     </p-button>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class='flex flex-column justify-content-center w-full '>
+        <div class='col-4'>
             <div class='flex flex-column justify-content-evenly align-items-center'>
                 <div
                     class="flex align-items-center justify-content-center border-circle w-4rem h-4rem shadow-1 bg-white m-2">
                     <p class='text-4xl'>3</p>
                 </div>
                 <div class='border-left-3 h-3rem m-2'></div>
-                <p class='text-4xl m-2'>Host Availability</p>
+                <p class='text-4xl m-2'>Details</p>
             </div>
-            <div class='h-20rem bg-white shadow-1 border-round-md w-full'>
-                aaa
+            <div class='h-auto bg-white shadow-1 border-round-md px-2 py-2'>
+
+                <h3 class='my-0'>Event Name</h3>
+                <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+                    {{eventDetails.value.eventName === '' ? '...' : eventDetails.value.eventName}}</p>
+
+                <h3 class='my-0'>Event Description</h3>
+                <p class='mt-0 mb-2 text-overflow-ellipsis'>
+                    {{eventDetails.value.eventDescription === '' ? '...' :
+                    eventDetails.value.eventDescription}}</p>
+
+                <h3 class='my-0'>Event Location</h3>
+                <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+                    {{eventDetails.value.eventLocation === '' ? '...' :
+                    eventDetails.value.eventLocation}}</p>
+
+                <h3 class='my-0'>Event Dates</h3>
+                <div *ngIf="(eventDetails.value.date.length > 0); else elseBlock">
+                    <div *ngFor='let date of eventDetails.value.date'>
+                        <p class='mt-0 mb-2'>{{date | date: 'EEE dd MMM yyyy'}}</p>
+                    </div>
+                </div>
+                <ng-template #elseBlock>
+                    <p class='mt-0 mb-2'>No date selected</p>
+                </ng-template>
+
+
             </div>
         </div>
     </div>
