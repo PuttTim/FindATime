@@ -12,3 +12,11 @@ html, body {
     height: 100%;
     background: #eef3fb;
   }
+
+.content-container {
+    height: 90vh
+}
+
+.navbar-container {
+    height: 10vh
+}

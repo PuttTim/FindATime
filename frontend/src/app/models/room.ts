@@ -1,4 +1,4 @@
-import { Availability } from './availability'
+import { Participant } from './participant'
 import { User } from './user'
 
 export interface Room {
@@ -9,5 +9,5 @@ export interface Room {
     location: string
     dates: Date[]
     duration: number
-    availability: Availability
+    participants: Participant[]
 }

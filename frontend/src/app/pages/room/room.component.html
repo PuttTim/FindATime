@@ -1,1 +1,122 @@
-<p>room works!</p>
+<div class='content-container'>
+    <div class='grid mx-4 pt-4'>
+        <div class='col-7'>
+            <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
+                <div>
+                    <h2>Name</h2>
+                    <p>{{this.roomData?.name}}</p>
+                </div>
+                <div>
+                    <h2>Location</h2>
+                    <p>{{this.roomData?.location}}</p>
+                </div>
+                <div>
+                    <h2>Duration</h2>
+                    <p>{{this.roomData?.duration}} Hours</p>
+                </div>
+                <div class='flex align-items-center mr-4'>
+                    <p-button icon="pi pi-info" styleClass='p-button-rounded'></p-button>
+                </div>
+            </div>
+        </div>
+        <div class='col-5'>
+            <div class='flex flex-row justify-content-between h-full w-full bg-white shadow-1 border-round-lg px-2'>
+                <div>
+                    <h2>Room Id</h2>
+                    <p>{{this.roomData?.id}}</p>
+                </div>
+                <div class='ml-2'>
+                    <h2>Room Link</h2>
+                    <div class='flex flex-row justify-content-evenly'>
+                        <p class='mt-0'>http://localhost:4200/{{this.roomData?.id}}</p>
+                        <p (click)='clipboardCopy()' class='pi pi-copy text-2xl mt-0 ml-1'></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='col-4'>
+            <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
+                <div>
+                    <h3>Best Timeslot 1</h3>
+                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                </div>
+                <div>
+                    <h3 class='text-right'>Availability</h3>
+                    <p class='text-right'>5/6 people</p>
+                </div>
+            </div>
+        </div>
+        <div class='col-4'>
+            <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
+                <div>
+                    <h3>Best Timeslot 2</h3>
+                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                </div>
+                <div>
+                    <h3 class='text-right'>Availability</h3>
+                    <p class='text-right'>5/6 people</p>
+                </div>
+            </div>
+        </div>
+        <div class='col-4'>
+            <div class='flex flex-row justify-content-between h-full bg-white shadow-1 border-round-lg px-2'>
+                <div>
+                    <h3>Best Timeslot 3</h3>
+                    <p>2022/01/01 @ 13:00 - 14:00</p>
+                </div>
+                <div>
+                    <h3 class='text-right'>Availability</h3>
+                    <p class='text-right'>5/6 people</p>
+                </div>
+            </div>
+        </div>
+        <div class='col-6'>
+            <div class='h-full bg-white shadow-1 border-round-lg px-2'>
+                <h2 class='mt-0 mb-0'>Participants</h2>
+                <div *ngFor='let participant of getParticipants();'
+                    class='flex flex-row justify-content-start align-items-center gap-3'>
+                    <div *ngIf='participant.user.id === this.roomData?.host?.id; else elseBlock'>
+                        <p class='pi pi-star ml-2'></p>
+                    </div>
+                    <ng-template #elseBlock>
+                        <div
+                            *ngIf='currentUser.id === this.roomData?.host?.id && this.participant.user.id ; else elseBlock2'>
+                            <p class='pi pi-times ml-2'></p>
+                        </div>
+                    </ng-template>
+                    <ng-template #elseBlock2>
+                        <p class='pi pi-user ml-2'></p>
+                    </ng-template>
+
+                    <p class='text-lg'>{{participant.user.username}}</p>
+                </div>
+            </div>
+        </div>
+        <div class='col-6'>
+            <div class='h-full bg-white shadow-1 border-round-lg px-2'>
+                <h2 class='mt-0 mb-0'>Your Available Timeslots</h2>
+                <div *ngFor="let date of getAvailableDates()" class='flex flex-column mt-2 mb-2'>
+
+                    <p class='mt-0'>{{date | date: 'EEE dd MMM yyyy:'}}</p>
+                    <div *ngIf='(getUserTimeslots(date)) !== undefined; else elseBlock'
+                        class='flex flex-row gap-3 mt-0 mb-2'>
+                        <div *ngFor='let timeslot of getUserTimeslots(date)'>
+                            <div>
+                                <p-chip
+                                    label='{{timeslot.startTime | date: "HH:mm"}} - {{timeslot.endTime | date: "HH:mm"}}'
+                                    styleClass="h-2rem">
+                                </p-chip>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #elseBlock>
+                        <p-chip styleClass="h-2rem">Unavailable</p-chip>
+                    </ng-template>
+
+                </div>
+
+                <p-button styleClass='w-full p-button-sm mb-2' label="SELECT AVAILABILITY" (click)='getBestTimeslot()'>
+                </p-button>
+            </div>
+        </div>
+    </div>

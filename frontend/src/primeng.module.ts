@@ -4,6 +4,7 @@ import { ImageModule } from 'primeng/image'
 import { DividerModule } from 'primeng/divider'
 import { InputTextModule } from 'primeng/inputtext'
 import { CalendarModule } from 'primeng/calendar'
+import { ChipModule } from 'primeng/chip'
 
 @NgModule({
     exports: [
@@ -11,7 +12,8 @@ import { CalendarModule } from 'primeng/calendar'
         ImageModule,
         DividerModule,
         InputTextModule,
-        CalendarModule
+        CalendarModule,
+        ChipModule
     ]
 })
 export class PrimeNgModule {}
