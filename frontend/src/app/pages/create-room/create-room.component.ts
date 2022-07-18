@@ -1,7 +1,12 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
+import { nanoid } from 'nanoid'
+
 import { Timeslot } from '../../models/timeslot'
 import { PossibleTimeslots } from '../../models/possible-timeslots'
+import { Room } from 'src/app/models/room'
+
+import { UserService } from 'src/app/services/user.service'
 
 @Component({
     selector: 'app-create-room',
@@ -9,7 +14,7 @@ import { PossibleTimeslots } from '../../models/possible-timeslots'
     styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent implements OnInit {
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder, private UserProvider: UserService) {}
     eventDetails: FormGroup
 
     possibleTimeslots = PossibleTimeslots
@@ -35,6 +40,26 @@ export class CreateRoomComponent implements OnInit {
     onSubmit() {
         console.log(this.eventDetails.valid)
         console.log(this.timeslots.length >= 1)
+
+        console.log(this.UserProvider.currentUser)
+
+        const room: Room = {
+            host: this.UserProvider.currentUser,
+            id: nanoid(5),
+            name: this.eventDetails.value.name,
+            description: this.eventDetails.value.description,
+            location: this.eventDetails.value.location,
+            dates: this.eventDetails.value.date,
+            duration: this.eventDetails.value.duration,
+            participants: [
+                {
+                    user: this.UserProvider.currentUser,
+                    timeslots: this.timeslots
+                }
+            ]
+        }
+
+        console.log('LOG', room)
     }
 
     getAvailableDates() {

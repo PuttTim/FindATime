@@ -12,7 +12,7 @@ import { UserData } from '../../mockdata/user-data'
     styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit {
-    id: number
+    id: string
     roomData?: Room
     currentUser: User = UserData[1]
 

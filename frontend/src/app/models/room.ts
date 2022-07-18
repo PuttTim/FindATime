@@ -3,7 +3,7 @@ import { User } from './user'
 
 export interface Room {
     host: User
-    id: number
+    id: string
     name: string
     description: string
     location: string

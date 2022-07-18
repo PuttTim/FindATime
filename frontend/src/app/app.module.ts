@@ -13,6 +13,7 @@ import { SignInComponent } from './pages/sign-in/sign-in.component'
 import { NavbarComponent } from './components/navbar/navbar.component'
 import { CreateRoomComponent } from './pages/create-room/create-room.component'
 import { RoomComponent } from './pages/room/room.component'
+import { UserService } from './services/user.service'
 
 @NgModule({
     declarations: [
@@ -31,7 +32,7 @@ import { RoomComponent } from './pages/room/room.component'
         PrimeNgModule,
         ReactiveFormsModule
     ],
-    providers: [],
+    providers: [UserService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}
