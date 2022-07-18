@@ -3,11 +3,11 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router'
 import { Clipboard } from '@angular/cdk/clipboard'
 import { Room } from '../../models/room'
 import { User } from '../../models/user'
-import { RoomData } from '../../mockdata/room-data'
-import { UserData } from '../../mockdata/user-data'
 
 import { RoomService } from '../../services/room.service'
 import { UserService } from 'src/app/services/user.service'
+import { Timeslot } from 'src/app/models/timeslot'
+import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
 
 @Component({
     selector: 'app-room',
@@ -19,6 +19,10 @@ export class RoomComponent implements OnInit {
     roomData?: Room
     currentUser: User
 
+    showDialog: boolean
+    possibleTimeslots = PossibleTimeslots
+    timeslots: Timeslot[]
+
     constructor(
         private route: ActivatedRoute,
         private clipboard: Clipboard,
@@ -27,11 +31,17 @@ export class RoomComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.timeslots = []
+        this.showDialog = false
         this.route.params.subscribe(params => {
             this.id = params.id
             this.currentUser = this.UserProvider.currentUser
             this.roomData = this.RoomProvider.getRoomById(this.id)
         })
+    }
+
+    toggleDialog() {
+        this.showDialog = !this.showDialog
     }
 
     clipboardCopy() {
@@ -44,7 +54,6 @@ export class RoomComponent implements OnInit {
     }
 
     getUserTimeslots(availableDate: Date) {
-        // console.log(availableDate.getDate())
         const timeslots = this.roomData?.participants
             .find(participant => participant.user.id == this.currentUser.id)
             ?.timeslots.find(
@@ -57,7 +66,7 @@ export class RoomComponent implements OnInit {
                 (a, b) => a.startTime.getTime() - b.startTime.getTime()
             )
 
-        console.log(typeof timeslots)
+        // console.log(typeof timeslots)
 
         return timeslots
     }
@@ -80,7 +89,7 @@ export class RoomComponent implements OnInit {
 
         // Count the number of times each start time occurs into a 2d array of
         // [[Date, count], [Date, count], ...]
-        console.log('AY', this.countStartTimes(allStartTimes))
+        // console.log('AY', this.countStartTimes(allStartTimes))
 
         return this.countStartTimes(allStartTimes)
     }
@@ -109,5 +118,41 @@ export class RoomComponent implements OnInit {
         console.log(typeof startTime)
 
         return new Date(startTime.getHours() + duration * 60000)
+    }
+
+    selectedTimeslots(date: Date, index: number, value: any) {
+        const availability = {
+            date: date,
+            availability: value.map((slot: any) => {
+                const year = date.getFullYear()
+                const month = date.getMonth()
+                const day = date.getDate()
+                const hour = slot.value[0]
+                const minute = slot.value[1]
+                const duration = this.roomData?.duration
+
+                return {
+                    startTime: new Date(year, month, day, hour, minute),
+                    endTime: new Date(year, month, day, hour + duration, minute)
+                }
+            })
+        }
+
+        const indexOfDate = this.timeslots.findIndex(e => e.date === date)
+
+        if (indexOfDate === -1) {
+            this.timeslots.push(availability)
+        } else {
+            this.timeslots.splice(indexOfDate, 1, availability)
+        }
+    }
+
+    updateTimeslots() {
+        this.toggleDialog()
+        this.RoomProvider.updateTimeslots(
+            this.id,
+            this.currentUser,
+            this.timeslots
+        )
     }
 }

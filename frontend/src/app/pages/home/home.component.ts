@@ -30,6 +30,10 @@ export class HomeComponent implements OnInit {
     }
 
     navigateToCreateRoom() {
+        this.router.navigateByUrl('create-room')
+    }
+
+    navigateToRoom() {
         this.router.navigateByUrl(`room/${this.roomId.value}`)
     }
 

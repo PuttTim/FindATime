@@ -7,6 +7,8 @@ import { PossibleTimeslots } from '../../models/possible-timeslots'
 import { Room } from 'src/app/models/room'
 
 import { UserService } from 'src/app/services/user.service'
+import { RoomService } from 'src/app/services/room.service'
+import { Router } from '@angular/router'
 
 @Component({
     selector: 'app-create-room',
@@ -14,7 +16,12 @@ import { UserService } from 'src/app/services/user.service'
     styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent implements OnInit {
-    constructor(private fb: FormBuilder, private UserProvider: UserService) {}
+    constructor(
+        private router: Router,
+        private fb: FormBuilder,
+        private UserProvider: UserService,
+        private RoomProvider: RoomService
+    ) {}
     eventDetails: FormGroup
 
     possibleTimeslots = PossibleTimeslots
@@ -60,6 +67,10 @@ export class CreateRoomComponent implements OnInit {
         }
 
         console.log('LOG', room)
+
+        this.RoomProvider.insertRoom(room)
+
+        this.router.navigateByUrl(`room/${room.id}`)
     }
 
     getAvailableDates() {
