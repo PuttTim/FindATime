@@ -14,6 +14,7 @@ import { NavbarComponent } from './components/navbar/navbar.component'
 import { CreateRoomComponent } from './pages/create-room/create-room.component'
 import { RoomComponent } from './pages/room/room.component'
 import { UserService } from './services/user.service'
+import { RoomService } from './services/room.service'
 
 @NgModule({
     declarations: [
@@ -32,7 +33,7 @@ import { UserService } from './services/user.service'
         PrimeNgModule,
         ReactiveFormsModule
     ],
-    providers: [UserService],
+    providers: [UserService, RoomService],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

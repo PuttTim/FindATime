@@ -6,6 +6,8 @@ import { User } from '../../models/user'
 import { RoomData } from '../../mockdata/room-data'
 import { UserData } from '../../mockdata/user-data'
 
+import { RoomService } from '../../services/room.service'
+
 @Component({
     selector: 'app-room',
     templateUrl: './room.component.html',
@@ -16,12 +18,16 @@ export class RoomComponent implements OnInit {
     roomData?: Room
     currentUser: User = UserData[1]
 
-    constructor(private route: ActivatedRoute, private clipboard: Clipboard) {}
+    constructor(
+        private route: ActivatedRoute,
+        private clipboard: Clipboard,
+        private RoomProvider: RoomService
+    ) {}
 
     ngOnInit(): void {
         this.route.params.subscribe(params => {
             this.id = params.id
-            this.roomData = RoomData.find(room => room.id == this.id)
+            this.roomData = this.RoomProvider.getRoomById(this.id)
         })
     }
 
