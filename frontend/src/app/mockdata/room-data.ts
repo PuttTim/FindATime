@@ -3,7 +3,7 @@ import { UserData } from './user-data'
 
 export const RoomData: Room[] = [
     {
-        id: '1',
+        id: 'rW21a',
         name: 'Innova Project discussion: Ideation',
         description:
             'To discuss about the design thinking process and how to tackle our problem statement',
@@ -73,7 +73,7 @@ export const RoomData: Room[] = [
         ]
     },
     {
-        id: '2',
+        id: 'rP0wA',
         name: 'Innova Project discussion: Protoyping',
         description: 'To work together and create a prototype',
         location: 'TP',

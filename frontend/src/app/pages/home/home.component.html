@@ -6,14 +6,14 @@
 
             </div>
             <div class='flex flex-row gap-8'>
-                <div class='flex flex-column justify-content-evenly w-16rem shadow-2 h-20rem text-2xl text-center bg-white border-round-md'
-                    (click)='navigateToCreateRoom()'>
+                <div (click)='navigateToCreateRoom()'
+                    class='flex flex-column justify-content-evenly w-16rem shadow-2 h-20rem text-2xl text-center bg-white border-round-md hover'>
                     <p-image src='assets/create_room.svg' width='168'></p-image>
 
                     <p>Create a Room</p>
                 </div>
-                <div
-                    class='flex flex-column justify-content-evenly w-16rem shadow-2 h-20rem text-2xl text-center bg-white border-round-sm'>
+                <div (click)='toggleDialog()'
+                    class='flex flex-column justify-content-evenly w-16rem shadow-2 h-20rem text-2xl text-center bg-white border-round-sm hover'>
                     <p-image src='assets/login_black.svg' width='120'></p-image>
                     <p>Join a Room</p>
                 </div>
@@ -23,3 +23,33 @@
         <p-image src='assets/home_vector_graphic.svg' width='576' class='pt-8'></p-image>
     </div>
 </div>
+
+<p-dialog [(visible)]="showDialog" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'
+    [dismissableMask]='true'>
+    <ng-template pTemplate="header">
+        <div class='w-full'>
+            <h2>Join a Room</h2>
+            <p>Use the room ID from your colleague or friend to join their room!!</p>
+        </div>
+    </ng-template>
+    <div>
+        <div class='field'>
+            <div class='flex flex-row w-full justify-content-between'>
+                <p for='roomId'>Enter Room ID</p>
+                <div *ngIf='isRoomIdValid; else elseBlock'></div>
+                <ng-template #elseBlock>
+                    <p class='text-red-500'> Please enter a valid room ID</p>
+                </ng-template>
+
+            </div>
+
+            <input id='roomId' maxlength="5" [formControl]='roomId' type='text' class='w-full p-2'
+                placeholder='...rW2aP...' required>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-arrow-right" (click)="navigateToCreateRoom()" label="JOIN" [disabled]='!isRoomIdValid'
+            styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>

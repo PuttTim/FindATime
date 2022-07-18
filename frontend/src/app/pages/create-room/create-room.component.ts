@@ -78,6 +78,7 @@ export class CreateRoomComponent implements OnInit {
                 (a, b) => a.startTime.getTime() - b.startTime.getTime()
             )
     }
+
     toggleDialog() {
         this.showDialog = !this.showDialog
     }
