@@ -24,18 +24,35 @@ export class CreateRoomComponent implements OnInit {
         this.showDialog = false
         this.minDate = new Date()
         this.eventDetails = this.fb.group({
-            eventName: '',
-            eventDescription: '',
-            eventLocation: '',
+            name: '',
+            description: '',
+            location: '',
             date: '',
             duration: ''
         })
     }
 
-    log() {
-        console.log(this.eventDetails.value)
+    onSubmit() {
+        console.log(this.eventDetails.valid)
+        console.log(this.timeslots.length >= 1)
     }
 
+    getAvailableDates() {
+        return this.eventDetails.value.date
+    }
+
+    getUserTimeslots(availableDate: Date) {
+        return this.timeslots
+            .find(
+                timeslot =>
+                    timeslot.date.getDate() == availableDate.getDate() &&
+                    timeslot.date.getMonth() == availableDate.getMonth() &&
+                    timeslot.date.getFullYear() == availableDate.getFullYear()
+            )
+            ?.availability.sort(
+                (a, b) => a.startTime.getTime() - b.startTime.getTime()
+            )
+    }
     toggleDialog() {
         this.showDialog = !this.showDialog
     }
