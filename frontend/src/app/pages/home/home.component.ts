@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormControl } from '@angular/forms'
 
-import { RoomService } from 'src/app/services/room.service'
+import { RoomService } from '../../services/room.service'
 
 @Component({
     selector: 'app-home',

@@ -7,6 +7,7 @@ import { RoomData } from '../../mockdata/room-data'
 import { UserData } from '../../mockdata/user-data'
 
 import { RoomService } from '../../services/room.service'
+import { UserService } from 'src/app/services/user.service'
 
 @Component({
     selector: 'app-room',
@@ -16,17 +17,19 @@ import { RoomService } from '../../services/room.service'
 export class RoomComponent implements OnInit {
     id: string
     roomData?: Room
-    currentUser: User = UserData[1]
+    currentUser: User
 
     constructor(
         private route: ActivatedRoute,
         private clipboard: Clipboard,
-        private RoomProvider: RoomService
+        private RoomProvider: RoomService,
+        private UserProvider: UserService
     ) {}
 
     ngOnInit(): void {
         this.route.params.subscribe(params => {
             this.id = params.id
+            this.currentUser = this.UserProvider.currentUser
             this.roomData = this.RoomProvider.getRoomById(this.id)
         })
     }
@@ -77,7 +80,7 @@ export class RoomComponent implements OnInit {
 
         // Count the number of times each start time occurs into a 2d array of
         // [[Date, count], [Date, count], ...]
-        console.log(typeof this.countStartTimes(allStartTimes)[0][0])
+        console.log('AY', this.countStartTimes(allStartTimes))
 
         return this.countStartTimes(allStartTimes)
     }
