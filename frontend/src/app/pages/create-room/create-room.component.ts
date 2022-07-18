@@ -45,11 +45,6 @@ export class CreateRoomComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.eventDetails.valid)
-        console.log(this.timeslots.length >= 1)
-
-        console.log(this.UserProvider.currentUser)
-
         const room: Room = {
             host: this.UserProvider.currentUser,
             id: nanoid(5),
@@ -65,8 +60,6 @@ export class CreateRoomComponent implements OnInit {
                 }
             ]
         }
-
-        console.log('LOG', room)
 
         this.RoomProvider.insertRoom(room)
 

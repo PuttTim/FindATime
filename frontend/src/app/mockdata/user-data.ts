@@ -10,8 +10,8 @@ export const UserData: User[] = [
     },
     {
         id: 2,
-        username: 'Putt2',
-        email: 'putt@email.com',
+        username: 'User 2',
+        email: 'randomuser@email.com',
         password: 'password',
         tier: USER_TIER.FREE
     }

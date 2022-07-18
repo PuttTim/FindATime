@@ -10,5 +10,10 @@ export class UserService {
 
     currentUser = this.users[0]
 
+    setCurrentUser(userIndex: number) {
+        this.currentUser = this.users[userIndex]
+        console.log(this.currentUser)
+    }
+
     constructor() {}
 }
