@@ -33,10 +33,10 @@ export class RoomComponent implements OnInit {
     ngOnInit(): void {
         this.timeslots = []
         this.showDialog = false
+        this.currentUser = this.UserProvider.currentUser
+        this.roomData = this.RoomProvider.getRoomById(this.id)
         this.route.params.subscribe(params => {
             this.id = params.id
-            this.currentUser = this.UserProvider.currentUser
-            this.roomData = this.RoomProvider.getRoomById(this.id)
         })
     }
 
