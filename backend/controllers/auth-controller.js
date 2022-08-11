@@ -10,18 +10,10 @@ const argonOptions = {
 const db = dbConnection.collection('users')
 
 async function createUser(req, res) {
-    let password
-
-    try {
-        password = await argon2.hash(req.body.password, argonOptions)
-    } catch (error) {
-        console.log(error)
-    }
-
     const user = {
         username: req.body.username,
         email: req.body.email,
-        password: password
+        password: await argon2.hash(req.body.password, argonOptions)
     }
 
     db.findOne(
@@ -29,13 +21,14 @@ async function createUser(req, res) {
         (err, results) => {
             try {
                 if (results) {
-                    // 409: Conflict
+                    // 409: Duplicate username or email found.
                     res.status(409).send('Email or Username already exists')
                 } else {
                     db.insertOne(user, (err, results) => {
                         if (err) {
                             console.log(err)
                         } else {
+                            // 200: User created and inserted successfully
                             res.status(200).json({
                                 message: 'User created',
                                 _id: `${results.insertedId}`
@@ -73,6 +66,7 @@ async function authenticateUser(req, res) {
                         _id: `${results._id}`
                     })
                 } else {
+                    // 401: User's password was incorrect
                     res.status(401).json({ message: 'Invalid Password' })
                 }
             } else if (results == null) {
@@ -93,9 +87,11 @@ function deleteUser(req, res) {
             if (err) {
                 console.log(err)
             } else if (results.deletedCount == 1) {
+                // 200: User successfully deleted
                 res.status(200).json({ message: 'User deleted' })
                 console.log(results)
             } else {
+                // 404: User not found in the collection.
                 res.status(404).json({ message: 'User not found' })
             }
         } catch (err) {
