@@ -23,19 +23,25 @@ async function createUser(req, res) {
         password: password
     }
 
-    dbConnection.collection('users').insertOne(user, (error, results) => {
-        try {
-            if (error) {
-                res.status(500).send(error)
-                console.log(error)
+    dbConnection
+        .collection('users')
+        .findOne({ email: user.email }, (err, results) => {
+            if (err) {
+                console.log(err)
+            } else if (results) {
+                res.status(400).send('Email already exists')
             } else {
-                res.status(200).send('User created')
+                dbConnection
+                    .collection('users')
+                    .insertOne(user, (err, results) => {
+                        if (err) {
+                            console.log(err)
+                        } else {
+                            res.status(200).send('User created')
+                        }
+                    })
             }
-        } catch {
-            res.status(500).send(error)
-            console.log(error)
-        }
-    })
+        })
 }
 
 module.exports = {
