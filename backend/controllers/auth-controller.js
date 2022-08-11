@@ -1,4 +1,5 @@
 const argon2 = require('argon2')
+const ObjectId = require('mongodb').ObjectId
 const dbConnection = require('../db')
 
 const argonOptions = {
@@ -84,7 +85,27 @@ async function authenticateUser(req, res) {
     })
 }
 
+function deleteUser(req, res) {
+    const _id = req.body._id
+    console.log(req.body)
+    db.deleteOne({ _id: ObjectId(_id) }, (err, results) => {
+        try {
+            if (err) {
+                console.log(err)
+            } else if (results.deletedCount == 1) {
+                res.status(200).json({ message: 'User deleted' })
+                console.log(results)
+            } else {
+                res.status(404).json({ message: 'User not found' })
+            }
+        } catch (err) {
+            res.status(500).json({ message: 'Internal server error' })
+        }
+    })
+}
+
 module.exports = {
     createUser,
-    authenticateUser
+    authenticateUser,
+    deleteUser
 }
