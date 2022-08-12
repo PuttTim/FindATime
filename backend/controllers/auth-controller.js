@@ -24,6 +24,7 @@ function getUserById(req, res) {
                 res.status(200).json(user)
             } else {
                 // 404: User not found in the collection.
+                console.log(results)
                 res.status(404).json({ message: 'User not found' })
             }
         } catch (err) {
@@ -42,9 +43,11 @@ async function createUser(req, res) {
 
     db.insertOne(user, (err, results) => {
         try {
-            if (err.code == 11000) {
-                // 409: Duplicate username or email found.
-                res.status(409).send('Email or Username already exists')
+            if (err) {
+                if (err.code == 11000) {
+                    // 409: Duplicate username or email found.
+                    res.status(409).send('Email or Username already exists')
+                }
             } else {
                 // 200: User created and inserted successfully
                 res.status(200).json({
@@ -121,9 +124,11 @@ function updateUser(req, res) {
         { upsert: true },
         (err, results) => {
             try {
-                if ((err.code = 11000)) {
-                    // 409: Duplicate username or email found.
-                    res.status(409).send('Email or Username already exists')
+                if (err) {
+                    if ((err.code = 11000)) {
+                        // 409: Duplicate username or email found.
+                        res.status(409).send('Email or Username already exists')
+                    }
                 } else if (results.modifiedCount == 1) {
                     // 200: User successfully updated
                     res.status(200).json({ message: 'User updated' })
