@@ -52,7 +52,7 @@
                 </div>
                 <div class='field'>
                     <p>Host Availability</p>
-                    <p-button (click)='toggleDialog()'
+                    <p-button (onClick)='toggleDialog()'
                         [disabled]='!(this.eventDetails.value.duration > 0 && this.eventDetails.value.date.length >= 1)'
                         styleClass='w-full p-button-sm' label="SELECT AVAILABILITY">
                     </p-button>
@@ -124,13 +124,13 @@
 </div>
 
 <div class='w-full px-5 mt-2 mb-4'>
-    <p-button (click)='onSubmit()' [disabled]="!(this.eventDetails.valid && this.timeslots.length >= 1)"
-        label="Create Room" styleClass='w-full'>
+    <p-button (onClick)='onSubmit()' [disabled]="!(this.eventDetails.valid && this.timeslots.length >= 1)"
+        label="CREATE ROOM" styleClass='w-full'>
     </p-button>
 </div>
 
 
-<p-dialog [(visible)]="showDialog" [modal]="true" [style]="{width: '75vw', height: '80vh'}" [draggable]="false"
+<p-dialog [(visible)])="showDialog" [modal]="true" [style]="{width: '75vw', height: '80vh'}" [draggable]="false"
     [resizable]="false" closeIcon='pi' [dismissableMask]='true'>
     <ng-template pTemplate="header">
         <div class='w-full'>
