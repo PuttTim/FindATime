@@ -3,7 +3,7 @@ const authController = require('../controllers/auth-controller')
 
 const router = express.Router()
 
-router.get('/user/:username', authController.getUserById)
+router.get('/user/:username', authController.getUserByUsername)
 router.post('/register', authController.createUser)
 router.post('/login', authController.authenticateUser)
 router.delete('/delete', authController.deleteUser)

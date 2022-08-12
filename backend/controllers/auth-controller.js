@@ -10,7 +10,7 @@ const argonOptions = {
 
 const db = dbConnection.collection('users')
 
-function getUserById(req, res) {
+function getUserByUsername(req, res) {
     console.log(req.params)
     db.findOne({ username: req.params.username }, (err, results) => {
         try {
@@ -144,7 +144,7 @@ function updateUser(req, res) {
 }
 
 module.exports = {
-    getUserById,
+    getUserByUsername,
     createUser,
     authenticateUser,
     deleteUser,
