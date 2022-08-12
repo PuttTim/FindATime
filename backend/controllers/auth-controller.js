@@ -11,7 +11,6 @@ const argonOptions = {
 const db = dbConnection.collection('users')
 
 function getUserByUsername(req, res) {
-    console.log(req.params)
     db.findOne({ username: req.params.username }, (err, results) => {
         try {
             if (results) {
@@ -24,7 +23,6 @@ function getUserByUsername(req, res) {
                 res.status(200).json(user)
             } else {
                 // 404: User not found in the collection.
-                console.log(results)
                 res.status(404).json({ message: 'User not found' })
             }
         } catch (err) {

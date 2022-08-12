@@ -1,8 +1,34 @@
-<div class='w-full flex flex-column align-items-center justify-content-center gap-3'>
-    <h1>--- TESTING PURPOSES ----</h1>
-    <h2>Select the user you want to test with:</h2>
+<div class='flex flex-row align-items-center justify-content-center content-container'>
+    <div class='flex flex-column align-self-center justify-content-center w-30rem mr-8 mb-8'>
+        <p class='text-4xl m-0 mt-8'>Welcome to</p>
+        <p class='text-6xl m-0 mt-2'>FindATime</p>
+        <p class='text-2xl m-0 mt-2'>Get the perfect timeslot for your meeting, game time, meetup time for your
+            colleague, associates, friends, classmates!</p>
+        <p class='text-xl m-0 mt-6'>✔ Automated timeslot picking to help you decide!</p>
+        <p class='text-xl m-0 mt-2'>✔ Easy to invite your friends!</p>
+    </div>
 
-    <p-button label='User 1' (click)='setCurrentUser(0)'></p-button>
-    <p-button label='User 2' (click)='setCurrentUser(1)'></p-button>
-
+    <form [formGroup]="userDetails"
+        class='flex flex-column align-self-center justify-content-evenly shadow-4 bg-white border-round-md p-3'>
+        <p class='text-4xl font-bold m-0 my-2'>Login</p>
+        <div class='field'>
+            <label for='email'>Email Address</label>
+            <input type='email' id='email' formControlName='email' class='w-full p-2' required />
+        </div>
+        <div class='field'>
+            <label for='password'>Password</label>
+            <div class='flex flex-row align-items-center'>
+                <input [type]='isPasswordVisible ? "text" : "password"' id='password' formControlName='password'
+                    class='w-full p-2' required>
+                <p [class]='isPasswordVisible ? "pi pi-eye-slash text-lg m-0 px-2 ml-1 cursor-pointer" : "pi pi-eye text-lg m-0 px-2 ml-1 cursor-pointer"'
+                    (click)='togglePasswordVisibility()'>
+                </p>
+            </div>
+        </div>
+        <p-button (onClick)='onSubmit()' [disabled]='!this.userDetails.valid' styleClass='p-button-sm w-full mt-4'
+            label="SIGN IN">
+        </p-button>
+        <p class='text-lg m-0 mt-4'>Don't have an account? Create one <span class='text-lg cursor-pointer'
+                routerLink='/sign-up'>here</span></p>
+    </form>
 </div>
