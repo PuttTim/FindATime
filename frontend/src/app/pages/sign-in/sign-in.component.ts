@@ -54,6 +54,5 @@ export class SignInComponent implements OnInit {
                 }
             }
         )
-        // this.UserProvider.setCurrentUser('62f5985952253ac93923486a')
     }
 }

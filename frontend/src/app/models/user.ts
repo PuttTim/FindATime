@@ -1,6 +1,6 @@
 enum USER_TIER {
-    FREE = 'Free',
-    PREMIUM = 'Premium'
+    FREE = 'free',
+    PAID = 'paid'
 }
 
 interface User {

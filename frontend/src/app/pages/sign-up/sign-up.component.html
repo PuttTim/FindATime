@@ -37,4 +37,31 @@
         <p class='text-lg m-0 mt-4'>Already have an account? Sign in <span class='text-lg cursor-pointer'
                 routerLink='/sign-in'>here</span></p>
     </form>
+
 </div>
+
+<p-dialog [(visible)]="isDialogVisible" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'>
+    <ng-template pTemplate="header" class='m-0'>
+        <div class='w-full'>
+            <h2>Upgrade your account?</h2>
+            <p>Upgrade your account from the Free tier to the Paid tier to enjoy additional perks!</p>
+            <p>✔ View your active rooms</p>
+            <p>✔ Increased room capacity (from 5 to 50)</p>
+            <p>✔ Change your username</p>
+        </div>
+    </ng-template>
+    <div class='mt-0'>
+
+        <p>One-time cost of {{4.99 | currency:'USD':'symbol'}} (Forever pricing!)</p>
+
+        <div #paypal></div>
+
+
+    </div>
+    <ng-template pTemplate="footer">
+
+        <p-button (onClick)='navigateToSignIn()' icon="pi pi-times" label="NO I WANT TO STAY ON THE FREE TIER"
+            styleClass="p-button-danger p-button-text ">
+        </p-button>
+    </ng-template>
+</p-dialog>

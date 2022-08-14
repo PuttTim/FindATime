@@ -17,30 +17,33 @@ export class UserService {
     currentUser: Subject<User> = new BehaviorSubject<any>(undefined)
 
     setCurrentUser(res: any) {
+        console.log(res)
+
         console.log(API_URL + 'user/user/' + res)
 
         this.http.get(API_URL + 'user/user/' + res).subscribe(
             (res: any) => {
                 this.currentUser.next(res)
-                console.log('USER SET')
-
-                this.currentUser.subscribe(user => {
-                    console.log('yes', user)
-                })
             },
             err => {
                 console.log(err)
             }
         )
-        console.log(this.currentUser)
+        // console.log(this.currentUser)
     }
 
     registerUser(user: any) {
-        console.log(user)
-        return this.http.post(API_URL + 'user/register', user)
+        return this.http.post(API_URL + 'user/register', {
+            ...user,
+            tier: 'free'
+        })
     }
 
     loginUser(user: any) {
         return this.http.post(API_URL + 'user/login', user)
+    }
+
+    updateUser(user: any) {
+        return this.http.put(API_URL + 'user/update', user)
     }
 }

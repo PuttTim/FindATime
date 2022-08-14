@@ -148,6 +148,8 @@ function updateUser(req, res) {
     // and places the _id from the request body into it's own variable.
     const { _id, ...user } = req.body
 
+    console.log(req)
+
     db.updateOne(
         { _id: ObjectId(_id) },
         { $set: user },
