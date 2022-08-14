@@ -28,4 +28,15 @@ function getAllRoomId(req, res) {
     })
 }
 
-module.exports = { createRoom, getAllRoomId }
+function getRoomById(req, res) {
+    roomId = req.params.id
+    db.findOne({ id: roomId }, (err, results) => {
+        if (err) {
+            res.status(500).json({ message: 'Internal server error' })
+        } else {
+            res.status(200).json(results)
+        }
+    })
+}
+
+module.exports = { createRoom, getAllRoomId, getRoomById }

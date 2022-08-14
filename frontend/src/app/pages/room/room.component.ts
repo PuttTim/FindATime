@@ -8,6 +8,7 @@ import { RoomService } from '../../services/room.service'
 import { UserService } from 'src/app/services/user.service'
 import { Timeslot } from 'src/app/models/timeslot'
 import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
+import { interval } from 'rxjs'
 
 @Component({
     selector: 'app-room',
@@ -22,6 +23,7 @@ export class RoomComponent implements OnInit {
     showDialog: boolean
     possibleTimeslots = PossibleTimeslots
     timeslots: Timeslot[]
+    timer: any
 
     constructor(
         private route: ActivatedRoute,
@@ -32,14 +34,31 @@ export class RoomComponent implements OnInit {
         this.UserProvider.currentUser.subscribe(user => {
             this.currentUser = user
         })
+
+        this.timer = interval(5000).subscribe(() => {
+            this.getRoomData()
+        })
     }
 
     ngOnInit(): void {
+        this.route.params.subscribe(params => {
+            this.id = params.id
+        })
+        this.getRoomData()
         this.timeslots = []
         this.showDialog = false
         this.roomData = this.RoomProvider.getRoomByIdOld(this.id)
-        this.route.params.subscribe(params => {
-            this.id = params.id
+    }
+
+    getRoomData() {
+        this.RoomProvider.getRoomById(this.id).subscribe((room: any) => {
+            console.log('ROOM GOTTEN AY')
+
+            this.roomData = room as Room
+            this.timeslots = room.participants.find(
+                (participant: any) =>
+                    participant.user._id == this.currentUser._id
+            )?.timeslots
         })
     }
 
@@ -60,13 +79,13 @@ export class RoomComponent implements OnInit {
         const timeslots = this.roomData?.participants
             .find(participant => participant.user._id == this.currentUser._id)
             ?.timeslots.find(
-                timeslot =>
-                    timeslot.date.getDate() == availableDate.getDate() &&
-                    timeslot.date.getMonth() == availableDate.getMonth() &&
-                    timeslot.date.getFullYear() == availableDate.getFullYear()
+                (timeslot: Timeslot) =>
+                    timeslot.date.getDate == availableDate.getDate &&
+                    timeslot.date.getMonth == availableDate.getMonth &&
+                    timeslot.date.getFullYear == availableDate.getFullYear
             )
             ?.availability.sort(
-                (a, b) => a.startTime.getTime() - b.startTime.getTime()
+                (a: any, b: any) => a.startTime.getTime - b.startTime.getTime
             )
 
         // console.log(typeof timeslots)
@@ -157,5 +176,9 @@ export class RoomComponent implements OnInit {
             this.currentUser,
             this.timeslots
         )
+    }
+
+    ngOnDestroy() {
+        this.timer.unsubscribe()
     }
 }
