@@ -1,5 +1,4 @@
 const argon2 = require('argon2')
-const { request } = require('express')
 const ObjectId = require('mongodb').ObjectId
 const dbConnection = require('../db')
 

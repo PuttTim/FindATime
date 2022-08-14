@@ -4,13 +4,15 @@ import { HttpClient } from '@angular/common/http'
 import { UserData } from '../mockdata/user-data'
 import { API_URL } from './config'
 import { User } from '../models/user'
-import { BehaviorSubject, Observable, Subject } from 'rxjs'
+import { BehaviorSubject, Subject } from 'rxjs'
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        this.setCurrentUser('62f5985952253ac93923486a')
+    }
 
     users = UserData
 

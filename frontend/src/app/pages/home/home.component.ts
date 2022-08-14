@@ -13,6 +13,8 @@ export class HomeComponent implements OnInit {
     showDialog: boolean
     isRoomIdValid: boolean
 
+    allRoomIds: any
+
     roomId = new FormControl('')
 
     constructor(private router: Router, private RoomProvider: RoomService) {}
@@ -22,6 +24,11 @@ export class HomeComponent implements OnInit {
         this.showDialog = false
         this.roomId.valueChanges.subscribe(value => {
             this.isRoomIdValid = this.validateRoomId(value)
+        })
+        this.RoomProvider.getAllRoomId().subscribe(res => {
+            console.log(res)
+
+            this.allRoomIds = res
         })
     }
 
@@ -39,7 +46,7 @@ export class HomeComponent implements OnInit {
 
     validateRoomId(value: string) {
         if (value.length === 5) {
-            if (this.RoomProvider.getRoomById(value) !== undefined) {
+            if (this.allRoomIds.includes(value)) {
                 return true
             }
         }

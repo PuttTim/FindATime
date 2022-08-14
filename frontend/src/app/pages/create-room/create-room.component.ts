@@ -19,16 +19,6 @@ import { User } from 'src/app/models/user'
 export class CreateRoomComponent implements OnInit {
     currentUser: User
 
-    constructor(
-        private router: Router,
-        private fb: FormBuilder,
-        private UserProvider: UserService,
-        private RoomProvider: RoomService
-    ) {
-        this.UserProvider.currentUser.subscribe(user => {
-            this.currentUser = user
-        })
-    }
     eventDetails: FormGroup
 
     possibleTimeslots = PossibleTimeslots
@@ -38,7 +28,18 @@ export class CreateRoomComponent implements OnInit {
     minDate: Date
     showDialog: boolean
 
+    constructor(
+        private router: Router,
+        private fb: FormBuilder,
+        private UserProvider: UserService,
+        private RoomProvider: RoomService
+    ) {}
+
     ngOnInit(): void {
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+            console.log('AAAA', this.currentUser)
+        })
         this.timeslots = []
         this.showDialog = false
         this.minDate = new Date()
@@ -68,9 +69,11 @@ export class CreateRoomComponent implements OnInit {
             ]
         }
 
-        this.RoomProvider.insertRoom(room)
+        console.log(this.timeslots)
 
-        this.router.navigateByUrl(`room/${room.id}`)
+        console.log(room)
+
+        this.RoomProvider.createRoom(room)
     }
 
     getAvailableDates() {

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
 
+import { API_URL } from './config'
 import { RoomData } from '../mockdata/room-data'
 import { Room } from '../models/room'
 import { Timeslot } from '../models/timeslot'
@@ -11,7 +13,7 @@ import { User } from '../models/user'
 export class RoomService {
     roomsList = RoomData
 
-    constructor() {}
+    constructor(private http: HttpClient) {}
 
     insertRoom(room: Room) {
         this.roomsList.push(room)
@@ -28,5 +30,20 @@ export class RoomService {
             1,
             { user, timeslots }
         )
+    }
+
+    createRoom(room: Room) {
+        this.http.post(API_URL + 'room/create', room).subscribe(
+            (res: any) => {
+                console.log(res)
+            },
+            err => {
+                console.log(err)
+            }
+        )
+    }
+
+    getAllRoomId() {
+        return this.http.get(API_URL + 'room/allrooms')
     }
 }
