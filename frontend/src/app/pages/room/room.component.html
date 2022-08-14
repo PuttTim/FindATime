@@ -80,12 +80,12 @@
                 <h2 class='mt-0 mb-0 pt-2 pl-2'>Participants</h2>
                 <div *ngFor='let participant of getParticipants();'
                     class='flex flex-row justify-content-start align-items-center gap-3'>
-                    <div *ngIf='participant.user.id === this.roomData?.host?.id; else elseBlock'>
+                    <div *ngIf='participant.user._id === this.roomData?.host?._id; else elseBlock'>
                         <p class='pi pi-star ml-2'></p>
                     </div>
                     <ng-template #elseBlock>
                         <div
-                            *ngIf='currentUser.id === this.roomData?.host?.id && this.participant.user.id ; else elseBlock2'>
+                            *ngIf='currentUser._id === this.roomData?.host?._id && this.participant.user._id ; else elseBlock2'>
                             <p class='pi pi-times ml-2'></p>
                         </div>
                     </ng-template>

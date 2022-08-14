@@ -31,6 +31,32 @@ function getUserByUsername(req, res) {
     })
 }
 
+function getUserById(req, res) {
+    console.log(req.params)
+    db.findOne({ _id: ObjectId(req.params._id) }, (err, results) => {
+        try {
+            console.log(results)
+            console.log(err)
+            if (results) {
+                // 200: User found
+                const user = {
+                    _id: `${results._id}`,
+                    username: results.username,
+                    tier: results.tier
+                }
+                res.status(200).json(user)
+            } else {
+                // 404: User not found in the collection.
+                console.log(results)
+                console.log(err)
+                res.status(404).json({ message: 'User not found' })
+            }
+        } catch (err) {
+            res.status(500).json({ message: 'Internal server error' })
+        }
+    })
+}
+
 async function createUser(req, res) {
     const user = {
         username: req.body.username,
@@ -39,12 +65,18 @@ async function createUser(req, res) {
         tier: req.body.tier
     }
 
+    console.log(req.body)
+
     db.insertOne(user, (err, results) => {
         try {
+            console.log(results)
+            console.log(err)
             if (err) {
                 if (err.code == 11000) {
                     // 409: Duplicate username or email found.
-                    res.status(409).send('Email or Username already exists')
+                    res.status(409).json({
+                        message: 'Email or Username already exists'
+                    })
                 }
             } else {
                 // 200: User created and inserted successfully
@@ -143,6 +175,7 @@ function updateUser(req, res) {
 
 module.exports = {
     getUserByUsername,
+    getUserById,
     createUser,
     authenticateUser,
     deleteUser,

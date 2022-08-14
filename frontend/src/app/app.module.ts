@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { HttpClientModule } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ReactiveFormsModule } from '@angular/forms'
@@ -30,6 +31,7 @@ import { RoomService } from './services/room.service'
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
+        HttpClientModule,
         PrimeNgModule,
         ReactiveFormsModule
     ],

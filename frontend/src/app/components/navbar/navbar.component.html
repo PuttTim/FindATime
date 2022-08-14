@@ -4,10 +4,16 @@
     </p-image>
 
     <div class='pr-4'>
+        <div *ngIf='this.currentUser == undefined; else elseBlock'>
+            <p-button styleClass='p-button-outlined p-button-sm' class='p-2' routerLink='sign-up' label='Sign Up'>
+            </p-button>
+            <p-button styleClass='p-button-sm' class='p-2' [style]="{color: 'white'}" routerLink='sign-in'
+                label='Sign In'>
+            </p-button>
+        </div>
+        <ng-template #elseBlock>
+            <p>{{this.currentUser.username}}</p>
+        </ng-template>
 
-        <p-button styleClass='p-button-outlined p-button-sm' class='p-2' routerLink='sign-up' label='Sign Up'>
-        </p-button>
-        <p-button styleClass='p-button-sm' class='p-2' [style]="{color: 'white'}" routerLink='sign-in' label='Sign In'>
-        </p-button>
     </div>
 </div>

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { UserService } from 'src/app/services/user.service'
+import { MessageService } from 'primeng/api'
 
 @Component({
     selector: 'app-sign-in',
@@ -7,7 +9,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
     styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent implements OnInit {
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private UserProvider: UserService,
+        private messageService: MessageService
+    ) {}
 
     userDetails: FormGroup
     isPasswordVisible: boolean
@@ -25,6 +31,29 @@ export class SignInComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.userDetails.value)
+        this.UserProvider.loginUser(this.userDetails.value).subscribe(
+            (res: any) => {
+                console.log(res)
+                this.UserProvider.setCurrentUser(res._id)
+            },
+            err => {
+                if (err.status === 401 || err.status === 404) {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Wrong email or password'
+                    })
+                } else {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Something went wrong, please try again'
+                    })
+                }
+            }
+        )
+        // this.UserProvider.setCurrentUser('62f5985952253ac93923486a')
     }
 }

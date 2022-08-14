@@ -9,15 +9,13 @@ const client = new MongoClient(uri, {
     useUnifiedTopology: true
 })
 
-let dbConnection
-
 client.connect((err, db) => {
     if (err || !db) {
         return err
     }
 })
 
-dbConnection = client.db('FindATime')
+const dbConnection = client.db('FindATime')
 console.log('Successfully connected to MongoDB.')
 
 module.exports = dbConnection

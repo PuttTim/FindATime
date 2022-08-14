@@ -28,12 +28,15 @@ export class RoomComponent implements OnInit {
         private clipboard: Clipboard,
         private RoomProvider: RoomService,
         private UserProvider: UserService
-    ) {}
+    ) {
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+        })
+    }
 
     ngOnInit(): void {
         this.timeslots = []
         this.showDialog = false
-        this.currentUser = this.UserProvider.currentUser
         this.roomData = this.RoomProvider.getRoomById(this.id)
         this.route.params.subscribe(params => {
             this.id = params.id
@@ -55,7 +58,7 @@ export class RoomComponent implements OnInit {
 
     getUserTimeslots(availableDate: Date) {
         const timeslots = this.roomData?.participants
-            .find(participant => participant.user.id == this.currentUser.id)
+            .find(participant => participant.user._id == this.currentUser._id)
             ?.timeslots.find(
                 timeslot =>
                     timeslot.date.getDate() == availableDate.getDate() &&

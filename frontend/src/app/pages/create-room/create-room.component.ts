@@ -9,6 +9,7 @@ import { Room } from 'src/app/models/room'
 import { UserService } from 'src/app/services/user.service'
 import { RoomService } from 'src/app/services/room.service'
 import { Router } from '@angular/router'
+import { User } from 'src/app/models/user'
 
 @Component({
     selector: 'app-create-room',
@@ -16,12 +17,18 @@ import { Router } from '@angular/router'
     styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent implements OnInit {
+    currentUser: User
+
     constructor(
         private router: Router,
         private fb: FormBuilder,
         private UserProvider: UserService,
         private RoomProvider: RoomService
-    ) {}
+    ) {
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+        })
+    }
     eventDetails: FormGroup
 
     possibleTimeslots = PossibleTimeslots
@@ -46,7 +53,7 @@ export class CreateRoomComponent implements OnInit {
 
     onSubmit() {
         const room: Room = {
-            host: this.UserProvider.currentUser,
+            host: this.currentUser,
             id: nanoid(5),
             name: this.eventDetails.value.name,
             description: this.eventDetails.value.description,
@@ -55,7 +62,7 @@ export class CreateRoomComponent implements OnInit {
             duration: this.eventDetails.value.duration,
             participants: [
                 {
-                    user: this.UserProvider.currentUser,
+                    user: this.currentUser,
                     timeslots: this.timeslots
                 }
             ]
