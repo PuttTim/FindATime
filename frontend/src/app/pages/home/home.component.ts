@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormControl } from '@angular/forms'
+import { MessageService } from 'primeng/api'
 
 import { RoomService } from '../../services/room.service'
 
@@ -13,22 +14,19 @@ export class HomeComponent implements OnInit {
     showDialog: boolean
     isRoomIdValid: boolean
 
-    allRoomIds: any
-
     roomId = new FormControl('')
 
-    constructor(private router: Router, private RoomProvider: RoomService) {}
+    constructor(
+        private router: Router,
+        private messageService: MessageService,
+        private RoomProvider: RoomService
+    ) {}
 
     ngOnInit(): void {
         this.isRoomIdValid = false
         this.showDialog = false
         this.roomId.valueChanges.subscribe(value => {
             this.isRoomIdValid = this.validateRoomId(value)
-        })
-        this.RoomProvider.getAllRoomId().subscribe(res => {
-            console.log(res)
-
-            this.allRoomIds = res
         })
     }
 
@@ -40,15 +38,30 @@ export class HomeComponent implements OnInit {
         this.router.navigateByUrl('create-room')
     }
 
-    navigateToRoom() {
-        this.router.navigateByUrl(`room/${this.roomId.value}`)
+    onJoinRoom() {
+        this.RoomProvider.getAllRoomId().subscribe(
+            (res: any) => {
+                if (res.includes(this.roomId.value)) {
+                    this.messageService.add({
+                        key: 'tr',
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'You have successfully joined the room'
+                    })
+                    this.router.navigateByUrl(`room/${this.roomId.value}`)
+                } else {
+                    console.log('room not found')
+                }
+            },
+            err => {
+                console.log(err)
+            }
+        )
     }
 
     validateRoomId(value: string) {
         if (value.length === 5) {
-            if (this.allRoomIds.includes(value)) {
-                return true
-            }
+            return true
         }
         return false
     }

@@ -19,12 +19,12 @@ export class RoomService {
         this.roomsList.push(room)
     }
 
-    getRoomById(id: string) {
+    getRoomByIdOld(id: string) {
         return this.roomsList.find(room => room.id === id)
     }
 
     updateTimeslots(roomId: string, user: User, timeslots: Timeslot[]) {
-        const room = this.getRoomById(roomId)
+        const room = this.getRoomByIdOld(roomId)
         room?.participants.splice(
             room?.participants.findIndex(e => e.user === user),
             1,
@@ -45,5 +45,9 @@ export class RoomService {
 
     getAllRoomId() {
         return this.http.get(API_URL + 'room/allrooms')
+    }
+
+    getRoomById(id: string) {
+        return this.http.get(API_URL + 'room/' + id)
     }
 }

@@ -37,7 +37,7 @@ export class RoomComponent implements OnInit {
     ngOnInit(): void {
         this.timeslots = []
         this.showDialog = false
-        this.roomData = this.RoomProvider.getRoomById(this.id)
+        this.roomData = this.RoomProvider.getRoomByIdOld(this.id)
         this.route.params.subscribe(params => {
             this.id = params.id
         })
