@@ -47,12 +47,9 @@ function insertParticipant(req, res) {
     participant = req.body.participant
 
     db.findOne({ id: roomId }, (err, results) => {
-        console.log(results)
-        console.log(err)
         roomSize = results.participants.length
         maximumRoomSize = results.host.tier === 'paid' ? 50 : 5
-        console.log('roomsize', roomSize)
-        console.log('maxroomsize', maximumRoomSize)
+
         if (roomSize <= maximumRoomSize) {
             db.updateOne(
                 { id: roomId },
@@ -63,7 +60,7 @@ function insertParticipant(req, res) {
                             message: 'Internal server error'
                         })
                     } else {
-                        res.status(200).json(results)
+                        res.status(200).json({ message: 'Participant added' })
                     }
                 }
             )
@@ -88,10 +85,36 @@ function isUserInRoom(req, res) {
     })
 }
 
+function deleteParticipant(req, res) {
+    roomId = req.body.roomId
+    participant = req.body.participant
+
+    db.findOne({ id: roomId }, (err, results) => {
+        kickedParticipant = results.participants.find(
+            participant => participant.user._id === req.body._id
+        )
+
+        db.updateOne(
+            { id: roomId },
+            { $pull: { participants: kickedParticipant } },
+            (err, results) => {
+                if (err) {
+                    res.status(500).json({
+                        message: 'Internal server error'
+                    })
+                } else {
+                    res.status(200).json(results)
+                }
+            }
+        )
+    })
+}
+
 module.exports = {
     createRoom,
     getAllRoomId,
     getRoomById,
     insertParticipant,
-    isUserInRoom
+    isUserInRoom,
+    deleteParticipant
 }

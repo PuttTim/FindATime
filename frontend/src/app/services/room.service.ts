@@ -67,4 +67,11 @@ export class RoomService {
             _id: user._id
         })
     }
+
+    deleteParticipant(roomId: string, user: User) {
+        return this.http.post(API_URL + 'room/delete-participant', {
+            roomId,
+            _id: user._id
+        })
+    }
 }

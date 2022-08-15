@@ -183,6 +183,21 @@ export class RoomComponent implements OnInit {
         }
     }
 
+    kickParticipant(participant: User) {
+        console.log('Kicking', participant)
+        this.RoomProvider.deleteParticipant(this.id, participant).subscribe(
+            result => {
+                this.getRoomData()
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `${participant.username} has been kicked`
+                })
+            }
+        )
+    }
+
     ngOnDestroy() {
         this.timer.unsubscribe()
     }

@@ -83,7 +83,7 @@
                     <ng-template #elseBlock>
                         <div
                             *ngIf='currentUser._id === this.roomData?.host?._id && this.participant.user._id ; else elseBlock2'>
-                            <p class='pi pi-times ml-2'></p>
+                            <p (click)="kickParticipant(participant.user)" class='pi pi-times ml-2 cursor-pointer'></p>
                         </div>
                     </ng-template>
                     <ng-template #elseBlock2>

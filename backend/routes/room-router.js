@@ -8,5 +8,6 @@ router.get('/:id', roomController.getRoomById)
 router.post('/isuserinroom/', roomController.isUserInRoom)
 router.post('/create', roomController.createRoom)
 router.put('/insert-participant', roomController.insertParticipant)
+router.post('/delete-participant', roomController.deleteParticipant)
 
 module.exports = router

@@ -12,9 +12,9 @@ import { BehaviorSubject, Subject } from 'rxjs'
 export class UserService {
     constructor(private http: HttpClient) {
         // user1
-        this.setCurrentUser('62f9953613f9e83e6d162f73')
+        // this.setCurrentUser('62f9953613f9e83e6d162f73')
         // user2
-        // this.setCurrentUser('62f5985e52253ac93923486b')
+        this.setCurrentUser('62f5985e52253ac93923486b')
     }
 
     users = UserData
