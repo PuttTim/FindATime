@@ -40,7 +40,7 @@ function getRoomById(req, res) {
     })
 }
 
-function updateParticipant(req, res) {
+function insertParticipant(req, res) {
     roomId = req.body.roomId
     participant = req.body.participant
     console.log(req.body.participant.user)
@@ -71,4 +71,4 @@ function updateParticipant(req, res) {
     })
 }
 
-module.exports = { createRoom, getAllRoomId, getRoomById, updateParticipant }
+module.exports = { createRoom, getAllRoomId, getRoomById, insertParticipant }

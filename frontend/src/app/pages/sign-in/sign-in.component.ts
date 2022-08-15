@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { UserService } from 'src/app/services/user.service'
 import { MessageService } from 'primeng/api'
@@ -12,7 +13,8 @@ export class SignInComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private UserProvider: UserService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private router: Router
     ) {}
 
     userDetails: FormGroup
@@ -35,6 +37,13 @@ export class SignInComponent implements OnInit {
             (res: any) => {
                 console.log(res)
                 this.UserProvider.setCurrentUser(res._id)
+                this.router.navigateByUrl('/home')
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'success',
+                    summary: `Welcome back ${res.username}!`,
+                    detail: 'You have successfully logged in'
+                })
             },
             err => {
                 if (err.status === 401 || err.status === 404) {

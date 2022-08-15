@@ -139,10 +139,22 @@ export class HomeComponent implements OnInit {
         ).subscribe(
             (res: any) => {
                 console.log('RES', res)
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Joined the room!'
+                })
                 this.router.navigateByUrl(`room/${this.roomId.value}`)
             },
             (err: any) => {
                 if (err.status === 400) {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Welcome back!'
+                    })
                     this.router.navigateByUrl(`room/${this.roomId.value}`)
                 }
             }

@@ -108,7 +108,8 @@ async function authenticateUser(req, res) {
                     // 200: User authenticated and reply with the User's _id
                     res.status(200).json({
                         message: 'User Authenticated',
-                        _id: `${results._id}`
+                        _id: `${results._id}`,
+                        username: results.username
                     })
                 } else {
                     // 401: User's password was incorrect

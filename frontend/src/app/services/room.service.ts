@@ -52,9 +52,7 @@ export class RoomService {
     }
 
     updateParticipant(roomId: string, user: User, timeslots?: Timeslot[]) {
-        console.log('updateParticipant', roomId, user, timeslots)
-
-        return this.http.put(API_URL + 'room/update-participant', {
+        return this.http.put(API_URL + 'room/insert-participant', {
             roomId,
             participant: {
                 user,

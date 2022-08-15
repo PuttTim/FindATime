@@ -10,9 +10,7 @@ import { BehaviorSubject, Subject } from 'rxjs'
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private http: HttpClient) {
-        this.setCurrentUser('62f9953613f9e83e6d162f73')
-    }
+    constructor(private http: HttpClient) {}
 
     users = UserData
 
