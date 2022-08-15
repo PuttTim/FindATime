@@ -84,6 +84,10 @@
                     {{eventDetails.value.location === '' ? '...' :
                     eventDetails.value.location}}</p>
 
+                <h3 class='my-0'>Room Capacity</h3>
+                <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+                    Maximum {{getMaxRoomSize()}} participants</p>
+
                 <h3 class='my-0'>Duration (hours)</h3>
                 <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
                     {{eventDetails.value.duration === '' ? '...' :

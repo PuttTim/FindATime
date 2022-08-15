@@ -76,6 +76,10 @@ export class CreateRoomComponent implements OnInit {
         this.RoomProvider.createRoom(room)
     }
 
+    getMaxRoomSize() {
+        return this.currentUser.tier === 'paid' ? 50 : 5
+    }
+
     getAvailableDates() {
         return this.eventDetails.value.date
     }

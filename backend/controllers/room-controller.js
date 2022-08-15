@@ -45,19 +45,32 @@ function getRoomById(req, res) {
 function insertParticipant(req, res) {
     roomId = req.body.roomId
     participant = req.body.participant
-    db.updateOne(
-        { id: roomId },
-        { $push: { participants: participant } },
-        (err, results) => {
-            if (err) {
-                res.status(500).json({
-                    message: 'Internal server error'
-                })
-            } else {
-                res.status(200).json(results)
-            }
+
+    db.findOne({ id: roomId }, (err, results) => {
+        console.log(results)
+        console.log(err)
+        roomSize = results.participants.length
+        maximumRoomSize = results.host.tier === 'paid' ? 50 : 5
+        console.log('roomsize', roomSize)
+        console.log('maxroomsize', maximumRoomSize)
+        if (roomSize <= maximumRoomSize) {
+            db.updateOne(
+                { id: roomId },
+                { $push: { participants: participant } },
+                (err, results) => {
+                    if (err) {
+                        res.status(500).json({
+                            message: 'Internal server error'
+                        })
+                    } else {
+                        res.status(200).json(results)
+                    }
+                }
+            )
+        } else {
+            res.status(400).json({ message: 'Room is full' })
         }
-    )
+    })
 }
 
 function isUserInRoom(req, res) {

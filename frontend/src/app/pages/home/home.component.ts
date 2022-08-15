@@ -142,6 +142,7 @@ export class HomeComponent implements OnInit {
                 console.log(err)
             }
         )
+        this.insertParticipant()
     }
 
     insertParticipant() {
@@ -177,10 +178,12 @@ export class HomeComponent implements OnInit {
                 if (err.status === 400) {
                     this.messageService.add({
                         key: 'tc',
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Something went wrong, please try again'
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'The room is currently full, please try again later!'
                     })
+                    this.toggleDialog()
+                    this.toggleTimeslotDialog()
                 }
             }
         )
