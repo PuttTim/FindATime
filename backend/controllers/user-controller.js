@@ -31,11 +31,8 @@ function getUserByUsername(req, res) {
 }
 
 function getUserById(req, res) {
-    console.log(req.params)
     db.findOne({ _id: ObjectId(req.params._id) }, (err, results) => {
         try {
-            console.log(results)
-            console.log(err)
             if (results) {
                 // 200: User found
                 const user = {
@@ -46,8 +43,7 @@ function getUserById(req, res) {
                 res.status(200).json(user)
             } else {
                 // 404: User not found in the collection.
-                console.log(results)
-                console.log(err)
+
                 res.status(404).json({ message: 'User not found' })
             }
         } catch (err) {
@@ -64,12 +60,8 @@ async function createUser(req, res) {
         tier: req.body.tier
     }
 
-    console.log(req.body)
-
     db.insertOne(user, (err, results) => {
         try {
-            console.log(results)
-            console.log(err)
             if (err) {
                 if (err.code == 11000) {
                     // 409: Duplicate username or email found.
@@ -127,7 +119,6 @@ async function authenticateUser(req, res) {
 
 function deleteUser(req, res) {
     const _id = req.body._id
-    console.log(req.body)
     db.deleteOne({ _id: ObjectId(_id) }, (err, results) => {
         try {
             if (results.deletedCount == 1) {
@@ -143,13 +134,21 @@ function deleteUser(req, res) {
     })
 }
 
-function updateUser(req, res) {
+async function updateUser(req, res) {
     // Strips the _id from the request body when creating the user object,
     // and places the _id from the request body into it's own variable.
-    const { _id, ...user } = req.body
+    let { _id, ...user } = req.body
+    console.log(user)
+    if (user.password != '' && user.password != undefined) {
+        user.password = await argon2.hash(user.password, argonOptions)
+    }
 
-    console.log(req)
+    user = Object.fromEntries(
+        Object.entries(user).filter(([_, v]) => v != null && v != '')
+    )
 
+    console.log(req.body)
+    console.log(user)
     db.updateOne(
         { _id: ObjectId(_id) },
         { $set: user },

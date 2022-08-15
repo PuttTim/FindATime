@@ -110,10 +110,23 @@ function deleteParticipant(req, res) {
     })
 }
 
+function getUserActiveRooms(req, res) {
+    db.find({ 'participants.user._id': req.params._id }).toArray(
+        (err, results) => {
+            if (err) {
+                res.status(500).json({ message: 'Internal server error' })
+            } else {
+                res.status(200).json(results)
+            }
+        }
+    )
+}
+
 module.exports = {
     createRoom,
     getAllRoomId,
     getRoomById,
+    getUserActiveRooms,
     insertParticipant,
     isUserInRoom,
     deleteParticipant

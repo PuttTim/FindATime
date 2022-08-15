@@ -37,7 +37,7 @@ export class SignInComponent implements OnInit {
             (res: any) => {
                 console.log(res)
                 this.UserProvider.setCurrentUser(res._id)
-                this.router.navigateByUrl('/home')
+                setTimeout(() => this.router.navigateByUrl('/home'), 500)
                 this.messageService.add({
                     key: 'tc',
                     severity: 'success',

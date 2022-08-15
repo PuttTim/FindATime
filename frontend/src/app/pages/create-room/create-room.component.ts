@@ -73,7 +73,9 @@ export class CreateRoomComponent implements OnInit {
 
         console.log(room)
 
-        this.RoomProvider.createRoom(room)
+        this.RoomProvider.createRoom(room).subscribe((room: any) => {
+            this.router.navigate(['/room', room.id])
+        })
     }
 
     getMaxRoomSize() {

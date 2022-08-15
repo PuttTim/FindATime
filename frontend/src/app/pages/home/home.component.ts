@@ -40,7 +40,6 @@ export class HomeComponent implements OnInit {
         })
         this.UserProvider.currentUser.subscribe(user => {
             this.currentUser = user
-            console.log('AAAA', this.currentUser)
         }),
             (this.timeslots = [])
     }

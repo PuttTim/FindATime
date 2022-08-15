@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
 import { API_URL } from './config'
-import { RoomData } from '../mockdata/room-data'
 import { Room } from '../models/room'
 import { Timeslot } from '../models/timeslot'
 import { User } from '../models/user'
@@ -11,36 +10,10 @@ import { User } from '../models/user'
     providedIn: 'root'
 })
 export class RoomService {
-    roomsList = RoomData
-
     constructor(private http: HttpClient) {}
 
-    insertRoom(room: Room) {
-        this.roomsList.push(room)
-    }
-
-    getRoomByIdOld(id: string) {
-        return this.roomsList.find(room => room.id === id)
-    }
-
-    updateTimeslots(roomId: string, user: User, timeslots: Timeslot[]) {
-        const room = this.getRoomByIdOld(roomId)
-        room?.participants.splice(
-            room?.participants.findIndex(e => e.user === user),
-            1,
-            { user, timeslots }
-        )
-    }
-
     createRoom(room: Room) {
-        this.http.post(API_URL + 'room/create', room).subscribe(
-            (res: any) => {
-                console.log(res)
-            },
-            err => {
-                console.log(err)
-            }
-        )
+        return this.http.post(API_URL + 'room/create', room)
     }
 
     getAllRoomId() {
@@ -73,5 +46,9 @@ export class RoomService {
             roomId,
             _id: user._id
         })
+    }
+
+    getAllUserRooms(user: User) {
+        return this.http.get(API_URL + 'room/user/' + user._id)
     }
 }

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 
-import { UserData } from '../mockdata/user-data'
 import { API_URL } from './config'
 import { User } from '../models/user'
 import { BehaviorSubject, Subject } from 'rxjs'
@@ -14,10 +13,10 @@ export class UserService {
         // user1
         // this.setCurrentUser('62f9953613f9e83e6d162f73')
         // user2
-        this.setCurrentUser('62f5985e52253ac93923486b')
+        // this.setCurrentUser('62f5985e52253ac93923486b')
     }
 
-    users = UserData
+    isAuthenticated = false
 
     currentUser: Subject<User> = new BehaviorSubject<any>(undefined)
 
@@ -25,6 +24,7 @@ export class UserService {
         this.http.get(API_URL + 'user/user/' + res).subscribe(
             (res: any) => {
                 this.currentUser.next(res)
+                this.isAuthenticated = true
             },
             err => {
                 console.log(err)
@@ -38,6 +38,11 @@ export class UserService {
             ...user,
             tier: 'free'
         })
+    }
+
+    logoutUser() {
+        this.currentUser.next(undefined)
+        this.isAuthenticated = false
     }
 
     loginUser(user: any) {
