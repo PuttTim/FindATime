@@ -101,23 +101,40 @@ export class HomeComponent implements OnInit {
         return false
     }
 
-    insertParticipant() {
-        this.RoomProvider.getRoomById(this.roomId.value).subscribe(room => {
-            console.log(room)
-
-            this.roomData = room as Room
-            this.toggleTimeslotDialog()
-        })
-    }
-
     onJoinRoom() {
         this.RoomProvider.getAllRoomId().subscribe(
             (res: any) => {
                 if (res.includes(this.roomId.value)) {
-                    this.insertParticipant()
+                    this.RoomProvider.isUserInRoom(
+                        this.roomId.value,
+                        this.currentUser
+                    ).subscribe(
+                        (res: any) => {
+                            this.messageService.add({
+                                key: 'tc',
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Welcome back!'
+                            })
+                            this.router.navigateByUrl(
+                                `room/${this.roomId.value}`
+                            )
+                        },
+                        (err: any) => {
+                            this.insertParticipant()
+                        }
+                    )
+
+                    // this.insertParticipant()
 
                     // this.router.navigateByUrl(`room/${this.roomId.value}`)
                 } else {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Room does not exist!'
+                    })
                     console.log('room not found')
                 }
             },
@@ -125,6 +142,15 @@ export class HomeComponent implements OnInit {
                 console.log(err)
             }
         )
+    }
+
+    insertParticipant() {
+        this.RoomProvider.getRoomById(this.roomId.value).subscribe(room => {
+            console.log(room)
+
+            this.roomData = room as Room
+            this.toggleTimeslotDialog()
+        })
     }
 
     updateTimeslots() {
@@ -153,9 +179,8 @@ export class HomeComponent implements OnInit {
                         key: 'tc',
                         severity: 'success',
                         summary: 'Success',
-                        detail: 'Welcome back!'
+                        detail: 'Something went wrong, please try again'
                     })
-                    this.router.navigateByUrl(`room/${this.roomId.value}`)
                 }
             }
         )

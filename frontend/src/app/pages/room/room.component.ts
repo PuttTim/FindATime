@@ -17,7 +17,7 @@ import { interval } from 'rxjs'
 })
 export class RoomComponent implements OnInit {
     id: string
-    roomData?: Room
+    roomData: Room
     currentUser: User
 
     showDialog: boolean
@@ -47,18 +47,13 @@ export class RoomComponent implements OnInit {
         this.getRoomData()
         this.timeslots = []
         this.showDialog = false
-        this.roomData = this.RoomProvider.getRoomByIdOld(this.id)
     }
 
     getRoomData() {
         this.RoomProvider.getRoomById(this.id).subscribe((room: any) => {
-            console.log('ROOM GOTTEN AY')
+            console.log('Room re-fetched')
 
             this.roomData = room as Room
-            this.timeslots = room.participants.find(
-                (participant: any) =>
-                    participant.user._id == this.currentUser._id
-            )?.timeslots
         })
     }
 
@@ -76,21 +71,14 @@ export class RoomComponent implements OnInit {
     }
 
     getUserTimeslots(availableDate: Date) {
-        // console.log(this.roomData?.participants)
-
-        const timeslots = this.roomData?.participants
+        const timeslots = this.roomData.participants
             .find(participant => participant.user._id == this.currentUser._id)
-            ?.timeslots.find(
-                (timeslot: Timeslot) =>
-                    timeslot.date.getDate == availableDate.getDate &&
-                    timeslot.date.getMonth == availableDate.getMonth &&
-                    timeslot.date.getFullYear == availableDate.getFullYear
-            )
-            ?.availability.sort(
-                (a: any, b: any) => a.startTime.getTime - b.startTime.getTime
-            )
-
-        // console.log(typeof timeslots)
+            ?.timeslots.find((timeslot: Timeslot) => {
+                return timeslot.date === availableDate
+            })
+            ?.availability.sort((a: any, b: any) => {
+                return a.startTime.getTime - b.startTime.getTime
+            })
 
         return timeslots
     }

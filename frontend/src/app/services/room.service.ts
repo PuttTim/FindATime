@@ -60,4 +60,11 @@ export class RoomService {
             }
         })
     }
+
+    isUserInRoom(roomId: string, user: User) {
+        return this.http.post(API_URL + 'room/isuserinroom/', {
+            roomId,
+            _id: user._id
+        })
+    }
 }
