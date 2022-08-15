@@ -23,11 +23,31 @@ export class AuthGuard implements CanActivate {
         | Promise<boolean | UrlTree>
         | boolean
         | UrlTree {
-        if (!this.UserProvider.isAuthenticated) {
-            this.router.navigateByUrl('/sign-in')
-            return false
-        } else {
-            return true
-        }
+        const permission = route.data['permission']
+
+        return new Promise((resolve, reject) => {
+            if (!this.UserProvider.isAuthenticated) {
+                setTimeout(() => this.router.navigateByUrl('/sign-in'), 500)
+                resolve(false)
+            } else {
+                this.UserProvider.currentUser.subscribe(res => {
+                    if (permission.includes(res.tier)) {
+                        console.log('You have permission to access this page')
+
+                        resolve(true)
+                    } else {
+                        setTimeout(
+                            () => this.router.navigateByUrl('/home'),
+                            500
+                        )
+                        console.log(
+                            'You do not have permission to access this page'
+                        )
+
+                        resolve(false)
+                    }
+                })
+            }
+        })
     }
 }

@@ -9,16 +9,40 @@ import { ProfileComponent } from './pages/profile/profile.component'
 import { AuthGuard } from './auth.guard'
 
 const routes: Routes = [
-    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'sign-up', component: SignUpComponent },
-    { path: 'sign-in', component: SignInComponent },
+    {
+        path: 'home',
+        component: HomeComponent,
+        canActivate: [AuthGuard],
+        data: { permission: ['free', 'paid'] }
+    },
+    {
+        path: 'sign-up',
+        component: SignUpComponent,
+        data: { permission: ['free', 'paid'] }
+    },
+    {
+        path: 'sign-in',
+        component: SignInComponent,
+        data: { permission: ['free', 'paid'] }
+    },
     {
         path: 'create-room',
         component: CreateRoomComponent,
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        data: { permission: ['free', 'paid'] }
     },
-    { path: 'room/:id', component: RoomComponent, canActivate: [AuthGuard] },
-    { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+    {
+        path: 'room/:id',
+        component: RoomComponent,
+        canActivate: [AuthGuard],
+        data: { permission: ['free', 'paid'] }
+    },
+    {
+        path: 'profile',
+        component: ProfileComponent,
+        canActivate: [AuthGuard],
+        data: { permission: ['free', 'paid'] }
+    },
     { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ]
 

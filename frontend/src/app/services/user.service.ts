@@ -9,12 +9,7 @@ import { BehaviorSubject, Subject } from 'rxjs'
     providedIn: 'root'
 })
 export class UserService {
-    constructor(private http: HttpClient) {
-        // user1
-        // this.setCurrentUser('62f9953613f9e83e6d162f73')
-        // user2
-        // this.setCurrentUser('62f5985e52253ac93923486b')
-    }
+    constructor(private http: HttpClient) {}
 
     isAuthenticated = false
 
@@ -25,6 +20,7 @@ export class UserService {
             (res: any) => {
                 this.currentUser.next(res)
                 this.isAuthenticated = true
+                localStorage.setItem('userId', res._id)
             },
             err => {
                 console.log(err)
@@ -43,6 +39,7 @@ export class UserService {
     logoutUser() {
         this.currentUser.next(undefined)
         this.isAuthenticated = false
+        localStorage.removeItem('userId')
     }
 
     loginUser(user: any) {

@@ -26,6 +26,9 @@ export class SignInComponent implements OnInit {
             email: new FormControl('', [Validators.required, Validators.email]),
             password: new FormControl('', [Validators.required])
         })
+        if (this.UserProvider.isAuthenticated) {
+            setTimeout(() => this.router.navigateByUrl('/home'), 500)
+        }
     }
 
     togglePasswordVisibility() {

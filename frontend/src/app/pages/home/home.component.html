@@ -27,21 +27,14 @@
 <p-dialog [(visible)]="showDialog" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'
     [dismissableMask]='true'>
     <ng-template pTemplate="header">
-        <div class='w-full'>
-            <h2>Join a Room</h2>
-            <p>Use the room ID from your colleague or friend to join their room!</p>
-            <p>For testing: rW21a and rP0wA are valid room codes inside the mock data.</p>
+        <div class='w-full m-0'>
+            <h2 class='m-0'>Join a Room</h2>
         </div>
     </ng-template>
     <div>
         <div class='field'>
             <div class='flex flex-row w-full justify-content-between'>
                 <p for='roomId'>Enter Room ID</p>
-                <div *ngIf='isRoomIdValid; else elseBlock'></div>
-                <ng-template #elseBlock>
-                    <p class='text-red-500'> Please enter a valid room ID</p>
-                </ng-template>
-
             </div>
 
             <input id='roomId' maxlength="5" [formControl]='roomId' type='text' class='w-full p-2'
