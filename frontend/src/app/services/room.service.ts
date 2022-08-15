@@ -50,4 +50,16 @@ export class RoomService {
     getRoomById(id: string) {
         return this.http.get(API_URL + 'room/' + id)
     }
+
+    updateParticipant(roomId: string, user: User, timeslots?: Timeslot[]) {
+        console.log('updateParticipant', roomId, user, timeslots)
+
+        return this.http.put(API_URL + 'room/update-participant', {
+            roomId,
+            participant: {
+                user,
+                timeslots
+            }
+        })
+    }
 }

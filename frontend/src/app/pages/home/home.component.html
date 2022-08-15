@@ -54,3 +54,28 @@
         </p-button>
     </ng-template>
 </p-dialog>
+
+<p-dialog [(visible)]="showTimeslotDialog" [modal]="true" [style]="{width: '75vw', height: '80vh'}" [draggable]="false"
+    [resizable]="false" closeIcon='pi' [dismissableMask]='true'>
+    <ng-template pTemplate="header">
+        <div class='w-full'>
+            <div class='flex flex-row justify-content-between align-items-center'>
+                <h2>Select available timeslots</h2>
+                <p-button icon="pi pi-times" (click)='toggleTimeslotDialog()'
+                    styleClass='p-button-rounded p-button-text p-button-plain'>
+                </p-button>
+            </div>
+            <p class='mb-0'>End time is automatically calculated based on the duration of the event.</p>
+        </div>
+    </ng-template>
+    <div *ngFor="let date of this.roomData?.dates; index as i">
+        <p>{{date | date: 'EEE dd MMM yyyy'}}</p>
+        <p-multiSelect [maxSelectedLabels]='3' [options]="this.possibleTimeslots" optionLabel="name" display="chip"
+            (onChange)='selectedTimeslots(date, i, $event.value)' class='mr-4'>
+        </p-multiSelect>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-save" (click)="updateTimeslots()" label="SAVE" styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>

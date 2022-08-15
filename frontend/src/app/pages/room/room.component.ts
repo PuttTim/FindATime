@@ -76,6 +76,8 @@ export class RoomComponent implements OnInit {
     }
 
     getUserTimeslots(availableDate: Date) {
+        // console.log(this.roomData?.participants)
+
         const timeslots = this.roomData?.participants
             .find(participant => participant.user._id == this.currentUser._id)
             ?.timeslots.find(

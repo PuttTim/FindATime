@@ -30,6 +30,7 @@ function getAllRoomId(req, res) {
 
 function getRoomById(req, res) {
     roomId = req.params.id
+    console.log(roomId)
     db.findOne({ id: roomId }, (err, results) => {
         if (err) {
             res.status(500).json({ message: 'Internal server error' })
@@ -39,4 +40,35 @@ function getRoomById(req, res) {
     })
 }
 
-module.exports = { createRoom, getAllRoomId, getRoomById }
+function updateParticipant(req, res) {
+    roomId = req.body.roomId
+    participant = req.body.participant
+    console.log(req.body.participant.user)
+
+    db.findOne({ id: roomId }, (err, results) => {
+        isUserInRoom = results.participants.some(
+            participant =>
+                participant.user._id === req.body.participant.user._id
+        )
+        console.log(isUserInRoom)
+        if (!isUserInRoom) {
+            db.updateOne(
+                { id: roomId },
+                { $push: { participants: participant } },
+                (err, results) => {
+                    if (err) {
+                        res.status(500).json({
+                            message: 'Internal server error'
+                        })
+                    } else {
+                        res.status(200).json(results)
+                    }
+                }
+            )
+        } else {
+            res.status(400).json({ message: 'User already in room' })
+        }
+    })
+}
+
+module.exports = { createRoom, getAllRoomId, getRoomById, updateParticipant }

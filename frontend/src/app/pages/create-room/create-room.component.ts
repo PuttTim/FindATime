@@ -116,6 +116,9 @@ export class CreateRoomComponent implements OnInit {
         }
 
         const indexOfDate = this.timeslots.findIndex(e => e.date === date)
+        console.log(indexOfDate)
+        console.log(this.timeslots[indexOfDate])
+        console.log(date)
 
         if (indexOfDate === -1) {
             this.timeslots.push(availability)
