@@ -22,10 +22,6 @@ export class UserService {
     currentUser: Subject<User> = new BehaviorSubject<any>(undefined)
 
     setCurrentUser(res: any) {
-        console.log(res)
-
-        console.log(API_URL + 'user/user/' + res)
-
         this.http.get(API_URL + 'user/user/' + res).subscribe(
             (res: any) => {
                 this.currentUser.next(res)

@@ -32,10 +32,12 @@ function getRoomById(req, res) {
     roomId = req.params.id
     console.log(roomId)
     db.findOne({ id: roomId }, (err, results) => {
-        if (err) {
-            res.status(500).json({ message: 'Internal server error' })
-        } else {
+        if (results) {
             res.status(200).json(results)
+        } else if (results == null) {
+            res.status(404).json({ message: 'Room not found' })
+        } else {
+            res.status(500).json({ message: 'Internal server error' })
         }
     })
 }

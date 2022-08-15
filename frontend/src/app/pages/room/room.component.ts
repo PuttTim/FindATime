@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Clipboard } from '@angular/cdk/clipboard'
 import { Room } from '../../models/room'
 import { User } from '../../models/user'
@@ -9,6 +9,7 @@ import { UserService } from 'src/app/services/user.service'
 import { Timeslot } from 'src/app/models/timeslot'
 import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
 import { interval } from 'rxjs'
+import { MessageService } from 'primeng/api'
 
 @Component({
     selector: 'app-room',
@@ -20,7 +21,6 @@ export class RoomComponent implements OnInit {
     roomData: Room
     currentUser: User
 
-    showDialog: boolean
     possibleTimeslots = PossibleTimeslots
     timeslots: Timeslot[]
     timer: any
@@ -28,6 +28,8 @@ export class RoomComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private clipboard: Clipboard,
+        private router: Router,
+        private messageService: MessageService,
         private RoomProvider: RoomService,
         private UserProvider: UserService
     ) {
@@ -46,19 +48,41 @@ export class RoomComponent implements OnInit {
         })
         this.getRoomData()
         this.timeslots = []
-        this.showDialog = false
     }
 
     getRoomData() {
-        this.RoomProvider.getRoomById(this.id).subscribe((room: any) => {
-            console.log('Room re-fetched')
+        this.RoomProvider.getRoomById(this.id).subscribe(
+            (room: any) => {
+                console.log('Room re-fetched')
 
-            this.roomData = room as Room
-        })
-    }
+                this.roomData = room as Room
 
-    toggleDialog() {
-        this.showDialog = !this.showDialog
+                const isUserInRoom = this.roomData.participants.findIndex(
+                    participant => {
+                        return participant.user._id == this.currentUser._id
+                    }
+                )
+
+                if (isUserInRoom === -1) {
+                    this.router.navigateByUrl('/home')
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'You are not in this room, please join through the home page'
+                    })
+                }
+            },
+            error => {
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Room not found'
+                })
+                this.router.navigateByUrl('/home')
+            }
+        )
     }
 
     clipboardCopy() {
@@ -157,15 +181,6 @@ export class RoomComponent implements OnInit {
         } else {
             this.timeslots.splice(indexOfDate, 1, availability)
         }
-    }
-
-    updateTimeslots() {
-        this.toggleDialog()
-        this.RoomProvider.updateTimeslots(
-            this.id,
-            this.currentUser,
-            this.timeslots
-        )
     }
 
     ngOnDestroy() {
