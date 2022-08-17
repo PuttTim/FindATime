@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute, ParamMap } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { Clipboard } from '@angular/cdk/clipboard'
 import { Room } from '../../models/room'
 import { User } from '../../models/user'
@@ -8,6 +8,8 @@ import { RoomService } from '../../services/room.service'
 import { UserService } from 'src/app/services/user.service'
 import { Timeslot } from 'src/app/models/timeslot'
 import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
+import { interval } from 'rxjs'
+import { MessageService } from 'primeng/api'
 
 @Component({
     selector: 'app-room',
@@ -16,32 +18,71 @@ import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
 })
 export class RoomComponent implements OnInit {
     id: string
-    roomData?: Room
+    roomData: Room
     currentUser: User
 
-    showDialog: boolean
     possibleTimeslots = PossibleTimeslots
     timeslots: Timeslot[]
+    timer: any
 
     constructor(
         private route: ActivatedRoute,
         private clipboard: Clipboard,
+        private router: Router,
+        private messageService: MessageService,
         private RoomProvider: RoomService,
         private UserProvider: UserService
-    ) {}
+    ) {
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+        })
 
-    ngOnInit(): void {
-        this.timeslots = []
-        this.showDialog = false
-        this.currentUser = this.UserProvider.currentUser
-        this.roomData = this.RoomProvider.getRoomById(this.id)
-        this.route.params.subscribe(params => {
-            this.id = params.id
+        this.timer = interval(5000).subscribe(() => {
+            this.getRoomData()
         })
     }
 
-    toggleDialog() {
-        this.showDialog = !this.showDialog
+    ngOnInit(): void {
+        this.route.params.subscribe(params => {
+            this.id = params.id
+        })
+        this.getRoomData()
+        this.timeslots = []
+    }
+
+    getRoomData() {
+        this.RoomProvider.getRoomById(this.id).subscribe(
+            (room: any) => {
+                console.log('Room re-fetched')
+
+                this.roomData = room as Room
+
+                const isUserInRoom = this.roomData.participants.findIndex(
+                    participant => {
+                        return participant.user._id == this.currentUser._id
+                    }
+                )
+
+                if (isUserInRoom === -1) {
+                    this.router.navigateByUrl('/home')
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'You are not in this room, please join through the home page'
+                    })
+                }
+            },
+            error => {
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'Room not found'
+                })
+                this.router.navigateByUrl('/home')
+            }
+        )
     }
 
     clipboardCopy() {
@@ -54,19 +95,14 @@ export class RoomComponent implements OnInit {
     }
 
     getUserTimeslots(availableDate: Date) {
-        const timeslots = this.roomData?.participants
-            .find(participant => participant.user.id == this.currentUser.id)
-            ?.timeslots.find(
-                timeslot =>
-                    timeslot.date.getDate() == availableDate.getDate() &&
-                    timeslot.date.getMonth() == availableDate.getMonth() &&
-                    timeslot.date.getFullYear() == availableDate.getFullYear()
-            )
-            ?.availability.sort(
-                (a, b) => a.startTime.getTime() - b.startTime.getTime()
-            )
-
-        // console.log(typeof timeslots)
+        const timeslots = this.roomData.participants
+            .find(participant => participant.user._id == this.currentUser._id)
+            ?.timeslots.find((timeslot: Timeslot) => {
+                return timeslot.date === availableDate
+            })
+            ?.availability.sort((a: any, b: any) => {
+                return a.startTime.getTime - b.startTime.getTime
+            })
 
         return timeslots
     }
@@ -147,12 +183,22 @@ export class RoomComponent implements OnInit {
         }
     }
 
-    updateTimeslots() {
-        this.toggleDialog()
-        this.RoomProvider.updateTimeslots(
-            this.id,
-            this.currentUser,
-            this.timeslots
+    kickParticipant(participant: User) {
+        console.log('Kicking', participant)
+        this.RoomProvider.deleteParticipant(this.id, participant).subscribe(
+            result => {
+                this.getRoomData()
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `${participant.username} has been kicked`
+                })
+            }
         )
+    }
+
+    ngOnDestroy() {
+        this.timer.unsubscribe()
     }
 }

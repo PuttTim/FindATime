@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { nanoid } from 'nanoid'
 
@@ -9,6 +9,7 @@ import { Room } from 'src/app/models/room'
 import { UserService } from 'src/app/services/user.service'
 import { RoomService } from 'src/app/services/room.service'
 import { Router } from '@angular/router'
+import { User } from 'src/app/models/user'
 
 @Component({
     selector: 'app-create-room',
@@ -16,12 +17,8 @@ import { Router } from '@angular/router'
     styleUrls: ['./create-room.component.css']
 })
 export class CreateRoomComponent implements OnInit {
-    constructor(
-        private router: Router,
-        private fb: FormBuilder,
-        private UserProvider: UserService,
-        private RoomProvider: RoomService
-    ) {}
+    currentUser: User
+
     eventDetails: FormGroup
 
     possibleTimeslots = PossibleTimeslots
@@ -31,7 +28,18 @@ export class CreateRoomComponent implements OnInit {
     minDate: Date
     showDialog: boolean
 
+    constructor(
+        private router: Router,
+        private fb: FormBuilder,
+        private UserProvider: UserService,
+        private RoomProvider: RoomService
+    ) {}
+
     ngOnInit(): void {
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+            console.log('AAAA', this.currentUser)
+        })
         this.timeslots = []
         this.showDialog = false
         this.minDate = new Date()
@@ -46,7 +54,7 @@ export class CreateRoomComponent implements OnInit {
 
     onSubmit() {
         const room: Room = {
-            host: this.UserProvider.currentUser,
+            host: this.currentUser,
             id: nanoid(5),
             name: this.eventDetails.value.name,
             description: this.eventDetails.value.description,
@@ -55,15 +63,23 @@ export class CreateRoomComponent implements OnInit {
             duration: this.eventDetails.value.duration,
             participants: [
                 {
-                    user: this.UserProvider.currentUser,
+                    user: this.currentUser,
                     timeslots: this.timeslots
                 }
             ]
         }
 
-        this.RoomProvider.insertRoom(room)
+        console.log(this.timeslots)
 
-        this.router.navigateByUrl(`room/${room.id}`)
+        console.log(room)
+
+        this.RoomProvider.createRoom(room).subscribe((room: any) => {
+            this.router.navigate(['/room', room.id])
+        })
+    }
+
+    getMaxRoomSize() {
+        return this.currentUser.tier === 'paid' ? 50 : 5
     }
 
     getAvailableDates() {
@@ -106,6 +122,9 @@ export class CreateRoomComponent implements OnInit {
         }
 
         const indexOfDate = this.timeslots.findIndex(e => e.date === date)
+        console.log(indexOfDate)
+        console.log(this.timeslots[indexOfDate])
+        console.log(date)
 
         if (indexOfDate === -1) {
             this.timeslots.push(availability)

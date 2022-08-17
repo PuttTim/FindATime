@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormControl } from '@angular/forms'
+import { MessageService } from 'primeng/api'
 
 import { RoomService } from '../../services/room.service'
+import { UserService } from 'src/app/services/user.service'
+import { User } from 'src/app/models/user'
+import { Room } from 'src/app/models/room'
+import { Timeslot } from 'src/app/models/timeslot'
+import { PossibleTimeslots } from 'src/app/models/possible-timeslots'
 
 @Component({
     selector: 'app-home',
@@ -11,38 +17,172 @@ import { RoomService } from '../../services/room.service'
 })
 export class HomeComponent implements OnInit {
     showDialog: boolean
+    showTimeslotDialog: boolean
     isRoomIdValid: boolean
+    possibleTimeslots = PossibleTimeslots
 
     roomId = new FormControl('')
+    currentUser: User
+    roomData: Room
+    timeslots: Timeslot[]
 
-    constructor(private router: Router, private RoomProvider: RoomService) {}
+    constructor(
+        private router: Router,
+        private messageService: MessageService,
+        private RoomProvider: RoomService,
+        private UserProvider: UserService
+    ) {}
 
     ngOnInit(): void {
-        this.isRoomIdValid = false
-        this.showDialog = false
+        this.isRoomIdValid, this.showDialog, (this.showTimeslotDialog = false)
         this.roomId.valueChanges.subscribe(value => {
             this.isRoomIdValid = this.validateRoomId(value)
         })
+        this.UserProvider.currentUser.subscribe(user => {
+            this.currentUser = user
+        }),
+            (this.timeslots = [])
     }
 
     toggleDialog() {
         this.showDialog = !this.showDialog
     }
 
+    toggleTimeslotDialog() {
+        this.showTimeslotDialog = !this.showTimeslotDialog
+    }
+
     navigateToCreateRoom() {
         this.router.navigateByUrl('create-room')
     }
 
-    navigateToRoom() {
-        this.router.navigateByUrl(`room/${this.roomId.value}`)
+    selectedTimeslots(date: Date, index: number, value: any) {
+        const newDate = new Date(date)
+
+        const availability = {
+            date: newDate,
+            availability: value.map((slot: any) => {
+                const year = newDate.getFullYear()
+                const month = newDate.getMonth()
+                const day = newDate.getDate()
+                const hour = slot.value[0]
+                const minute = slot.value[1]
+                const duration = this.roomData?.duration
+
+                return {
+                    startTime: new Date(year, month, day, hour, minute),
+                    endTime: new Date(year, month, day, hour + duration, minute)
+                }
+            })
+        }
+
+        const indexOfDate = this.timeslots.findIndex(e => {
+            return e.date.getTime() === newDate.getTime()
+        })
+
+        if (indexOfDate === -1) {
+            this.timeslots.push(availability)
+            console.log('THIRD TIMESLOT PRINT', this.timeslots)
+
+            return
+        } else {
+            this.timeslots.splice(indexOfDate, 1, availability)
+            console.log('FORTH TIMESLOT PRINT', this.timeslots)
+
+            return
+        }
     }
 
     validateRoomId(value: string) {
         if (value.length === 5) {
-            if (this.RoomProvider.getRoomById(value) !== undefined) {
-                return true
-            }
+            return true
         }
         return false
+    }
+
+    onJoinRoom() {
+        this.RoomProvider.getAllRoomId().subscribe(
+            (res: any) => {
+                if (res.includes(this.roomId.value)) {
+                    this.RoomProvider.isUserInRoom(
+                        this.roomId.value,
+                        this.currentUser
+                    ).subscribe(
+                        (res: any) => {
+                            this.messageService.add({
+                                key: 'tc',
+                                severity: 'success',
+                                summary: 'Success',
+                                detail: 'Welcome back!'
+                            })
+                            this.router.navigateByUrl(
+                                `room/${this.roomId.value}`
+                            )
+                        },
+                        (err: any) => {
+                            console.log(err)
+
+                            this.insertParticipant()
+                        }
+                    )
+                } else {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'Room does not exist!'
+                    })
+                    console.log('room not found')
+                }
+            },
+            err => {
+                console.log(err)
+            }
+        )
+    }
+
+    insertParticipant() {
+        this.toggleTimeslotDialog()
+
+        this.RoomProvider.getRoomById(this.roomId.value).subscribe(room => {
+            console.log(room)
+
+            this.roomData = room as Room
+        })
+    }
+
+    updateTimeslots() {
+        this.toggleTimeslotDialog()
+
+        console.log('before insert ', this.timeslots)
+
+        this.RoomProvider.updateParticipant(
+            this.roomId.value,
+            this.currentUser,
+            this.timeslots
+        ).subscribe(
+            (res: any) => {
+                console.log('RES', res)
+                this.messageService.add({
+                    key: 'tc',
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Joined the room!'
+                })
+                this.router.navigateByUrl(`room/${this.roomId.value}`)
+            },
+            (err: any) => {
+                if (err.status === 400) {
+                    this.messageService.add({
+                        key: 'tc',
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'The room is currently full, please try again later!'
+                    })
+                    this.toggleDialog()
+                    this.toggleTimeslotDialog()
+                }
+            }
+        )
     }
 }

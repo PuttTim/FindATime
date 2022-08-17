@@ -1,15 +1,13 @@
 enum USER_TIER {
-    FREE = 'Free',
-    PREMIUM = 'Premium'
+    FREE = 'free',
+    PAID = 'paid'
 }
 
 interface User {
-    id: number
+    _id: number
     username: string
-    email: string
-    password: string
-    profilePicture?: any
     tier: USER_TIER
+    profilePicture?: any
 }
 
 export { User, USER_TIER }

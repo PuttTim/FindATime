@@ -1,0 +1,111 @@
+<div class='flex flex-row align-items-center justify-content-center content-container'>
+    <div class='flex flex-column align-self-center justify-content-evenly shadow-4 bg-white border-round-md p-3'>
+        <h1 class='m-0 mt-2 mb-2'>Your Profile</h1>
+        <h2 class='my-0'>Username</h2>
+        <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+            {{this.currentUser.username}}
+        </p>
+
+        <h2 class='my-0'>Account Tier</h2>
+        <p class='mt-0 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+            {{this.currentUser.tier | titlecase}}</p>
+
+        <p-button (onClick)="logout()" label="Logout" class="p-button-secondary w-full mt-4" styleClass="w-full">
+        </p-button>
+        <p-button (onClick)="toggleUpdateDialog()" label="Edit Profile" class="p-button-secondary mt-4"
+            styleClass="w-full">
+        </p-button>
+
+        <p-button *ngIf='this.currentUser.tier == "free"' (onClick)="toggleUpgradeDialog()" label="Upgrade Account"
+            class="p-button-secondary mt-4" styleClass="w-full">
+        </p-button>
+
+
+    </div>
+
+    <div *ngIf="this.currentUser.tier === 'paid'" class='ml-8'>
+        <div class='flex flex-column align-self-center justify-content-evenly shadow-4 bg-white border-round-md p-3'>
+            <h1 class='m-0 mt-2 mb-2'>Active Rooms</h1>
+            <div *ngFor='let room of this.allRooms'>
+                <div
+                    class='flex flex-column align-self-center justify-content-evenly bg-white border-black-alpha-90 border-1 border-round-md mb-4 px-2'>
+                    <p class='m-0 mt-1 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>{{room.name}}</p>
+                    <div *ngFor='let date of room.dates'>
+                        <p class='m-0 mt-1 mb-2'>{{date | date:'mediumDate'}}</p>
+
+                    </div>
+                    <p class='m-0 mt-1 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>
+                        <span class='pi pi-user mr-2'></span> {{room.participants.length}} {{room.participants.length
+                        === 1 ? 'participant' : 'participants'}}
+                    </p>
+                    <p class='m-0 mt-1 mb-2 text-overflow-ellipsis white-space-nowrap overflow-hidden'>Room ID:
+                        {{room.id}}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="isUpdateDialogVisible" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'>
+    <ng-template pTemplate="header" class='m-0'>
+        <div class='w-full'>
+            <h2>Update your profile</h2>
+        </div>
+    </ng-template>
+    <form [formGroup]="userDetails">
+        <div class='field' *ngIf='this.currentUser.tier == "paid"'>
+            <label for='username'>Username</label>
+            <input type='text' id='username' formControlName='username' placeholder='stevengrant' class='w-full p-2'
+                required />
+        </div>
+        <div class='field'>
+            <label for='email'>Email Address</label>
+            <input type='email' id='email' formControlName='email' placeholder='marcspector@email.com'
+                class='w-full p-2' />
+        </div>
+        <div class='field'>
+            <label for='password'>Password</label>
+            <div class='flex flex-row align-items-center'>
+                <input [type]='isPasswordVisible ? "text" : "password"' id='password' placeholder='jakelockley1234'
+                    formControlName='password' class='w-full p-2'>
+                <p [class]='isPasswordVisible ? "pi pi-eye-slash text-lg m-0 px-2 ml-1 cursor-pointer" : "pi pi-eye text-lg m-0 px-2 ml-1 cursor-pointer"'
+                    (click)='togglePasswordVisibility()'>
+                </p>
+            </div>
+        </div>
+    </form>
+
+    <ng-template pTemplate="footer">
+
+        <p-button (onClick)='onUpdateProfile()' icon="pi pi-times" label="CANCEL"
+            styleClass="p-button-danger p-button-text ">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="isUpgradeDialogVisible" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'>
+    <ng-template pTemplate="header" class='m-0'>
+        <div class='w-full'>
+            <h2>Upgrade your account?</h2>
+            <p>Upgrade your account from the Free tier to the Paid tier to enjoy additional perks!</p>
+            <p>✔ View your active rooms</p>
+            <p>✔ Increased room capacity (from 5 to 50)</p>
+            <p>✔ Change your username</p>
+        </div>
+    </ng-template>
+    <div class='mt-0'>
+
+        <p>One-time cost of {{4.99 | currency:'USD':'symbol'}} (Forever pricing!)</p>
+
+        <div #paypal></div>
+
+
+    </div>
+    <ng-template pTemplate="footer">
+
+        <p-button (onClick)='toggleUpgradeDialog()' icon="pi pi-times" label="NO I WANT TO STAY ON THE FREE TIER"
+            styleClass="p-button-danger p-button-text ">
+        </p-button>
+    </ng-template>
+</p-dialog>

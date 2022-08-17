@@ -7,6 +7,7 @@ import { CalendarModule } from 'primeng/calendar'
 import { ChipModule } from 'primeng/chip'
 import { DialogModule } from 'primeng/dialog'
 import { MultiSelectModule } from 'primeng/multiselect'
+import { ToastModule } from 'primeng/toast'
 
 @NgModule({
     exports: [
@@ -17,7 +18,8 @@ import { MultiSelectModule } from 'primeng/multiselect'
         CalendarModule,
         ChipModule,
         DialogModule,
-        MultiSelectModule
+        MultiSelectModule,
+        ToastModule
     ]
 })
 export class PrimeNgModule {}

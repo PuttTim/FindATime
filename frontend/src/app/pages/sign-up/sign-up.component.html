@@ -1,1 +1,67 @@
-<p>sign-up works!</p>
+<div class='flex flex-row align-items-center justify-content-center content-container'>
+    <div class='flex flex-column align-self-center justify-content-center w-30rem mr-8 mb-8'>
+        <p class='text-4xl m-0 mt-8'>Welcome to</p>
+        <p class='text-6xl m-0 mt-2'>FindATime</p>
+        <p class='text-2xl m-0 mt-2'>Get the perfect timeslot for your meeting, game time, meetup time for your
+            colleague, associates, friends, classmates!</p>
+        <p class='text-xl m-0 mt-6'>✔ Automated timeslot picking to help you decide!</p>
+        <p class='text-xl m-0 mt-2'>✔ Easy to invite your friends!</p>
+    </div>
+
+    <form [formGroup]="userDetails"
+        class='flex flex-column align-self-center justify-content-evenly shadow-4 bg-white border-round-md p-3'>
+        <p class='text-4xl font-bold m-0 my-2'>Register</p>
+        <div class='field'>
+            <label for='username'>Username</label>
+            <input type='text' id='username' formControlName='username' placeholder='stevengrant' class='w-full p-2'
+                required />
+        </div>
+        <div class='field'>
+            <label for='email'>Email Address</label>
+            <input type='email' id='email' formControlName='email' placeholder='marcspector@email.com'
+                class='w-full p-2' required />
+        </div>
+        <div class='field'>
+            <label for='password'>Password</label>
+            <div class='flex flex-row align-items-center'>
+                <input [type]='isPasswordVisible ? "text" : "password"' id='password' placeholder='jakelockley1234'
+                    formControlName='password' class='w-full p-2' required>
+                <p [class]='isPasswordVisible ? "pi pi-eye-slash text-lg m-0 px-2 ml-1 cursor-pointer" : "pi pi-eye text-lg m-0 px-2 ml-1 cursor-pointer"'
+                    (click)='togglePasswordVisibility()'>
+                </p>
+            </div>
+        </div>
+        <p-button (onClick)='onSubmit()' [disabled]='!this.userDetails.valid' styleClass='p-button-sm w-full mt-4'
+            label="CREATE ACCOUNT">
+        </p-button>
+        <p class='text-lg m-0 mt-4'>Already have an account? Sign in <span class='text-lg cursor-pointer'
+                routerLink='/sign-in'>here</span></p>
+    </form>
+
+</div>
+
+<p-dialog [(visible)]="isDialogVisible" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'>
+    <ng-template pTemplate="header" class='m-0'>
+        <div class='w-full'>
+            <h2>Upgrade your account?</h2>
+            <p>Upgrade your account from the Free tier to the Paid tier to enjoy additional perks!</p>
+            <p>✔ View your active rooms</p>
+            <p>✔ Increased room capacity (from 5 to 50)</p>
+            <p>✔ Change your username</p>
+        </div>
+    </ng-template>
+    <div class='mt-0'>
+
+        <p>One-time cost of {{4.99 | currency:'USD':'symbol'}} (Forever pricing!)</p>
+
+        <div #paypal></div>
+
+
+    </div>
+    <ng-template pTemplate="footer">
+
+        <p-button (onClick)='navigateToSignIn()' icon="pi pi-times" label="NO I WANT TO STAY ON THE FREE TIER"
+            styleClass="p-button-danger p-button-text ">
+        </p-button>
+    </ng-template>
+</p-dialog>

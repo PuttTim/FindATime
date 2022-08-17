@@ -27,21 +27,14 @@
 <p-dialog [(visible)]="showDialog" [modal]="true" [draggable]=" false" [resizable]="false" closeIcon='pi'
     [dismissableMask]='true'>
     <ng-template pTemplate="header">
-        <div class='w-full'>
-            <h2>Join a Room</h2>
-            <p>Use the room ID from your colleague or friend to join their room!</p>
-            <p>For testing: rW21a and rP0wA are valid room codes inside the mock data.</p>
+        <div class='w-full m-0'>
+            <h2 class='m-0'>Join a Room</h2>
         </div>
     </ng-template>
     <div>
         <div class='field'>
             <div class='flex flex-row w-full justify-content-between'>
                 <p for='roomId'>Enter Room ID</p>
-                <div *ngIf='isRoomIdValid; else elseBlock'></div>
-                <ng-template #elseBlock>
-                    <p class='text-red-500'> Please enter a valid room ID</p>
-                </ng-template>
-
             </div>
 
             <input id='roomId' maxlength="5" [formControl]='roomId' type='text' class='w-full p-2'
@@ -49,8 +42,33 @@
         </div>
     </div>
     <ng-template pTemplate="footer">
-        <p-button icon="pi pi-arrow-right" (click)="navigateToRoom()" label="JOIN" [disabled]='!isRoomIdValid'
+        <p-button icon="pi pi-arrow-right" (onClick)="onJoinRoom()" label="JOIN" [disabled]='!isRoomIdValid'
             styleClass="p-button-text">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [(visible)]="showTimeslotDialog" [modal]="true" [style]="{width: '75vw', height: '80vh'}" [draggable]="false"
+    [resizable]="false" closeIcon='pi' [dismissableMask]='true'>
+    <ng-template pTemplate="header">
+        <div class='w-full'>
+            <div class='flex flex-row justify-content-between align-items-center'>
+                <h2>Select available timeslots</h2>
+                <p-button icon="pi pi-times" (click)='toggleTimeslotDialog()'
+                    styleClass='p-button-rounded p-button-text p-button-plain'>
+                </p-button>
+            </div>
+            <p class='mb-0'>End time is automatically calculated based on the duration of the event.</p>
+        </div>
+    </ng-template>
+    <div *ngFor="let date of this.roomData?.dates; index as i">
+        <p>{{date | date: 'EEE dd MMM yyyy'}}</p>
+        <p-multiSelect [maxSelectedLabels]='3' [options]="this.possibleTimeslots" optionLabel="name" display="chip"
+            (onChange)='selectedTimeslots(date, i, $event.value)' class='mr-4'>
+        </p-multiSelect>
+    </div>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-save" (click)="updateTimeslots()" label="SAVE" styleClass="p-button-text">
         </p-button>
     </ng-template>
 </p-dialog>

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { HttpClientModule } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { ReactiveFormsModule } from '@angular/forms'
@@ -14,7 +15,8 @@ import { NavbarComponent } from './components/navbar/navbar.component'
 import { CreateRoomComponent } from './pages/create-room/create-room.component'
 import { RoomComponent } from './pages/room/room.component'
 import { UserService } from './services/user.service'
-import { RoomService } from './services/room.service'
+import { RoomService } from './services/room.service';
+import { ProfileComponent } from './pages/profile/profile.component'
 
 @NgModule({
     declarations: [
@@ -24,12 +26,14 @@ import { RoomService } from './services/room.service'
         SignInComponent,
         NavbarComponent,
         CreateRoomComponent,
-        RoomComponent
+        RoomComponent,
+        ProfileComponent
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
+        HttpClientModule,
         PrimeNgModule,
         ReactiveFormsModule
     ],
