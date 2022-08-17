@@ -54,7 +54,7 @@
         </div>
     </ng-template>
     <form [formGroup]="userDetails">
-        <div class='field'>
+        <div class='field' *ngIf='this.currentUser.tier == "paid"'>
             <label for='username'>Username</label>
             <input type='text' id='username' formControlName='username' placeholder='stevengrant' class='w-full p-2'
                 required />
@@ -78,7 +78,7 @@
 
     <ng-template pTemplate="footer">
 
-        <p-button (onClick)='onUpdateProfile()' icon="pi pi-times" label="NO I WANT TO STAY ON THE FREE TIER"
+        <p-button (onClick)='onUpdateProfile()' icon="pi pi-times" label="CANCEL"
             styleClass="p-button-danger p-button-text ">
         </p-button>
     </ng-template>

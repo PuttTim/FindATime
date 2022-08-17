@@ -88,7 +88,7 @@ export class SignUpComponent implements OnInit {
         this.UserProvider.registerUser(this.userDetails.value).subscribe(
             (res: any) => {
                 this._id = res._id
-                this.UserProvider.setCurrentUser(res._id)
+                // this.UserProvider.setCurrentUser(res._id)
                 this.toggleDialog()
             },
             err => {

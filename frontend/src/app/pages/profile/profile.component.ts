@@ -116,6 +116,7 @@ export class ProfileComponent implements OnInit {
     }
 
     onUpdateProfile() {
+        this.toggleUpdateDialog()
         this.UserProvider.updateUser({
             _id: this.currentUser._id,
             ...this.userDetails.value
@@ -126,7 +127,7 @@ export class ProfileComponent implements OnInit {
                 summary: 'Success',
                 detail: 'You have updated your profile successfully'
             })
-            this.toggleUpdateDialog()
+            // this.toggleUpdateDialog()
         })
     }
 

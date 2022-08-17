@@ -120,13 +120,11 @@ export class HomeComponent implements OnInit {
                             )
                         },
                         (err: any) => {
+                            console.log(err)
+
                             this.insertParticipant()
                         }
                     )
-
-                    // this.insertParticipant()
-
-                    // this.router.navigateByUrl(`room/${this.roomId.value}`)
                 } else {
                     this.messageService.add({
                         key: 'tc',
@@ -141,15 +139,15 @@ export class HomeComponent implements OnInit {
                 console.log(err)
             }
         )
-        this.insertParticipant()
     }
 
     insertParticipant() {
+        this.toggleTimeslotDialog()
+
         this.RoomProvider.getRoomById(this.roomId.value).subscribe(room => {
             console.log(room)
 
             this.roomData = room as Room
-            this.toggleTimeslotDialog()
         })
     }
 
