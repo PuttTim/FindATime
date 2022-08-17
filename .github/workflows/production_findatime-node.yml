@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'FindATime-node'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_61BA2A286C1F4CD7A57C60CC6278BDA5 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FC60867D63BE4393A348725F9C3111BB }}
           package: .
